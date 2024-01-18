@@ -44,7 +44,7 @@ let getHeroById = async (heroId, orgSecret) => {
     }
 }
 
-module.exports = {
+export  default {
     getHeroAliases,
     createHero,
     updateHero,

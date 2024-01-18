@@ -60,7 +60,7 @@ let getOrgById = async (idOrg, secret) => {
     }
 }
 
-module.exports = {
+export default {
     getOrgs,
     createOrg,
     addTeam,

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import orgService from '../services/org.service.js'
+import orgService from  '../services/org.service.js'
 import heroService from '../services/hero.service.js'
 import teamService from '../services/team.service.js'
 

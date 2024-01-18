@@ -42,7 +42,7 @@ let removeHeroes = async (idHeroes, idTeam) => {
     }
 }
 
-module.exports = {
+export  default {
     getTeams,
     createTeam,
     addHeroes,
