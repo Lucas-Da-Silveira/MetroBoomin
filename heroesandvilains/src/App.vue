@@ -6,35 +6,47 @@
       dark
     >
       <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
+        <v-menu
+            rounded="x"
+        >
+          <template v-slot:activator="{ attrs, on }">
+            <v-btn
+                class="white--text ma-5"
+                icon
+                v-bind="attrs"
+                v-on="on"
+            >
+              <v-icon x-large color="white">
+                mdi-menu
+              </v-icon>
+            </v-btn>
+          </template>
 
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
+          <v-list>
+            <router-link v-for="route in routes"
+                         :key="route"
+                         :to="route.path">
+              <v-list-item link>
+                <v-list-item-title>
+                  {{ route.name }}
+                </v-list-item-title>
+              </v-list-item>
+            </router-link>
+          </v-list>
+        </v-menu>
       </div>
 
       <v-spacer></v-spacer>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <router-link to="/login">
+        <v-btn
+            elevation="2"
+            text
+        >
+          <span class="mr-2">Login</span>
+          <v-icon color="white">mdi-account</v-icon>
+        </v-btn>
+      </router-link>
     </v-app-bar>
 
     <v-main>
@@ -49,7 +61,11 @@ export default {
   name: 'App',
 
   data: () => ({
-    //
+    routes: [
+      { name: 'Home', path: '/'},
+      { name: 'Organisations', path: '/orgs'},
+      { name: 'Teams', path: '/teams'},
+    ]
   }),
 };
 </script>
