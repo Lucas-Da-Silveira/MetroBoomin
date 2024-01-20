@@ -18,20 +18,6 @@ export default new Vuex.Store({
             currentOrg: null
         },
 
-        getters: {
-            heroAliases: state => state.heroAliases,
-
-            currentHero: state => state.currentHero,
-
-            teams: state => state.teams,
-
-            currentTeam: state => state.currentTeam,
-
-            orgNames: state => state.orgNames,
-
-            currentOrg: state => state.currentOrg
-        },
-
         mutations: {
             setOrgPassword(state, password) {
                 state.orgPassword = password;
