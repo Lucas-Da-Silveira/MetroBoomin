@@ -24,7 +24,7 @@
 
           <v-list>
             <router-link v-for="route in routes"
-                         :key="route"
+                         :key="route.path"
                          :to="route.path">
               <v-list-item link>
                 <v-list-item-title>
