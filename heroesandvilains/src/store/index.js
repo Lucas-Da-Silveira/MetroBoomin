@@ -39,6 +39,9 @@ export default new Vuex.Store({
             },
             setCurrentOrg(state, org) {
                 state.currentOrg = org;
+            },
+            addTeam(state, team) {
+                state.teams.push(team);
             }
         },
 
@@ -115,6 +118,15 @@ export default new Vuex.Store({
                 try {
                     const res = await orgService.getOrgById(orgId, state.orgPassword);
                     commit('setCurrentOrg', res.data);
+                } catch (err) {
+                    throw new Error(err.message);
+                }
+            },
+
+            async createTeam({commit, state}, team) {
+                try {
+                    const res = await teamService.createTeam(team, state.orgPassword);
+                    commit('addTeam', res.data);
                 } catch (err) {
                     throw new Error(err.message);
                 }
