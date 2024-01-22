@@ -14,7 +14,7 @@ export default new Vuex.Store({
             currentHero: null,
             teams: [],
             currentTeam: null,
-            orgNames: [],
+            orgs: [],
             currentOrg: null
         },
 
@@ -34,14 +34,17 @@ export default new Vuex.Store({
             setCurrentTeam(state, team) {
                 state.currentTeam = team;
             },
-            setOrgNames(state, names) {
-                state.orgNames = names;
+            setOrgs(state, orgs) {
+                state.orgs = orgs;
             },
             setCurrentOrg(state, org) {
                 state.currentOrg = org;
             },
             addTeam(state, team) {
                 state.teams.push(team);
+            },
+            addOrg(state, org) {
+                state.orgs.push(org);
             }
         },
 
@@ -55,7 +58,7 @@ export default new Vuex.Store({
                         await Promise.all([
                             this.dispatch('loadHeroAliases'),
                             this.dispatch('loadTeams'),
-                            this.dispatch('loadOrgNames'),
+                            this.dispatch('loadOrgs'),
                             this.dispatch('loadOrgDetails', org._id)
                         ]);
                         return org;
@@ -105,10 +108,11 @@ export default new Vuex.Store({
                 }
             },
 
-            async loadOrgNames({commit}) {
+            async loadOrgs({commit}) {
                 try {
                     const res = await orgService.getOrgs();
-                    commit('setOrgNames', res.data.map(org => org.name));
+                    // commit('setOrgNames', res.data.map(org => org.name)); //
+                    commit('setOrgs', res.data);
                 } catch (err) {
                     throw new Error(err.message);
                 }
@@ -128,6 +132,15 @@ export default new Vuex.Store({
                     const res = await teamService.createTeam(team, state.orgPassword);
                     commit('addTeam', res.data);
                 } catch (err) {
+                    throw new Error(err.message);
+                }
+            },
+
+            async createOrg({commit}, org) {
+                try {
+                    const res = await orgService.createOrg(org.name, org.password);
+                    commit('addOrg', res.data);
+                } catch(err) {
                     throw new Error(err.message);
                 }
             }
