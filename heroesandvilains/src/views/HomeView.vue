@@ -1,15 +1,18 @@
 <template>
-  <hello-world />
+  <div>
+    <h1>Welcome to Heroes & Vilains</h1>
+  </div>
 </template>
 
 <script>
-  import HelloWorld from '../components/HelloWorld'
 
   export default {
     name: 'HomeView',
-
-    components: {
-      HelloWorld,
-    },
   }
 </script>
+
+<style scoped>
+h1 {
+  text-align: center;
+}
+</style>
