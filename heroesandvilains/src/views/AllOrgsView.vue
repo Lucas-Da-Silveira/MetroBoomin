@@ -1,15 +1,15 @@
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapMutations } from 'vuex';
 export default {
   name: 'OrgsView',
   computed: {
-    ...mapState(['orgs']),
+    ...mapState(['orgs', 'orgPassword']),
   },
   data() {
     return {
       headers: [
         {text: 'Name', align: 'start', sortable: true, value: 'name'},
-        {text: 'Actions', sortable: false, value: 'actions'},
+        {text: 'Actions', value: 'actions', sortable: false},
       ],
       dialogVisible: false,
       newOrgName: '',
@@ -17,7 +17,8 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['loadOrgs', 'createOrg']),
+    ...mapActions(['loadOrgs', 'createOrg', 'authenticateOrganization']),
+    ...mapMutations(['setCurrentOrg']),
     openOrgCreationDialog() {
       this.dialogVisible = true;
     },
@@ -25,6 +26,12 @@ export default {
       this.dialogVisible = false;
       this.newOrgName = '';
       this.newOrgPassword = '';
+    },
+    handleClick(org) {
+      // if(this.authenticateOrganization(org._id, this.orgPassword) === null) {
+      //   return alert('Wrong password');
+      // }
+      this.$router.push(`/orgs/${org._id}`);
     },
     async createNewOrg() {
       try {
@@ -57,10 +64,10 @@ export default {
           <v-btn id="open-create-dialog" color="primary" @click="openOrgCreationDialog">NEW ORG</v-btn>
         </v-toolbar>
       </template>
-      <template v-slot:actions="{  }"> <!-- FIXME: faire en sorte que les orgas aient un bouton info (demander à domas?) -->
-        <v-icon small color="black">
-          mdi-information-box
-        </v-icon>
+      <template v-slot:item.actions="{ item }">
+        <v-btn color="primary" @click="handleClick(item)">
+          INFO
+        </v-btn>
       </template>
     </v-data-table>
 

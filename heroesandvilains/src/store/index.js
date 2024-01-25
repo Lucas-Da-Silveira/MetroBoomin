@@ -49,9 +49,10 @@ export default new Vuex.Store({
         },
 
         actions: {
-            async authenticateOrganization({commit}, password) {
+            async authenticateOrganization({commit}, id, password) {
                 try {
-                    const res = await orgService.getOrgs();
+
+                    const res = await orgService.getOrgById(id);
                     const org = res.data.find(org => org.secret === password);
                     if (org) {
                         commit('setOrgPassword', password);
