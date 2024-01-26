@@ -23,7 +23,7 @@ export default {
       this.dialogVisible = false;
       this.newTeamName = '';
     },
-    createNewTeam() {
+    createNewTeam() {  //FIXME : mettre  en await et non try catch
       this.createTeam({name: this.newTeamName })
           .then(() => {
             this.closeTeamCreationDialog();
@@ -47,6 +47,12 @@ export default {
         :items-per-page="5"
         class="elevation-1"
     >
+
+      <template v-slot:item.name="{ item }" >
+        <router-link :to="{ name: 'team-id', params: { id: item.id } }" class="route">
+          {{ item.name }}
+        </router-link>
+      </template>
 
       <template v-slot:top>
         <v-toolbar flat>
@@ -78,5 +84,10 @@ export default {
 <style scoped>
 .container {
   width: 60%;
+}
+
+.route {
+  text-decoration: none;
+  color: inherit;
 }
 </style>
