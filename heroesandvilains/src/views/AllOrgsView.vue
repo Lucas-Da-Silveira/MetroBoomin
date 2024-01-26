@@ -78,8 +78,8 @@ export default {
             <v-text-field v-model="newOrgName" label="Org Name"></v-text-field>
             <v-text-field v-model="newOrgPassword" label="Org Password"></v-text-field>
             <v-card-actions>
-              <v-btn color="green" type="submit">Create</v-btn>
-              <v-btn @click="closeOrgCreationDialog">Cancel</v-btn>
+              <v-btn color="green" dark type="submit">Create</v-btn>
+              <v-btn color="red" dark @click="closeOrgCreationDialog">Cancel</v-btn>
             </v-card-actions>
           </v-form>
         </v-card-text>
