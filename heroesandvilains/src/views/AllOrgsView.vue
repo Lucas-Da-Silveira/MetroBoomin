@@ -1,4 +1,5 @@
 <script>
+// Todo : Faire en sorte de ne pas pouvoir créer une equipe vide  de même pour org
 import { mapState, mapActions, mapMutations } from 'vuex';
 export default {
   name: 'OrgsView',
