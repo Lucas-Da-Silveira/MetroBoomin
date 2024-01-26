@@ -1,63 +1,39 @@
-import Axios from "./axios.service";
+import { getMethod, postMethod, patchMethod } from "./axios.service";
 
 let getOrgs = async () => {
-    try {
-        const res = await Axios.get('/orgs/get');
-        return res.data;
-    } catch(err) {
-        throw new Error(err.response.data);
-    }
+    return await getMethod('/orgs/get');
 }
 
 let createOrg = async (name, secret) => {
-    try {
-        const res = await Axios.post('/orgs/create', {
-            name,
-            secret
-        });
-        return res.data;
-    } catch(err) {
-        throw new Error(err.response.data);
-    }
+    return await postMethod('/orgs/create', {
+        name,
+        secret
+    });
 }
 
 let addTeam = async (idTeam, secret) => {
-    try {
-        const res = await Axios.patch('/orgs/addteam', idTeam, {
-            headers: {
-                'org-secret': secret
-            }
-        });
-        return res.data;
-    } catch(err) {
-        throw new Error(err.response.data);
-    }
+    return await patchMethod('/orgs/addteam', idTeam, {
+        headers: {
+            'org-secret': secret
+        }
+    });
 }
 
 let removeTeam = async (idTeam, secret) => {
-    try {
-        const res = await Axios.patch('/orgs/removeteam', idTeam, {
-            headers: {
-                'org-secret': secret
-            }
-        });
-        return res.data;
-    } catch(err) {
-        throw new Error(err.response.data);
-    }
+    return await patchMethod('/orgs/removeteam', idTeam, {
+        headers: {
+            'org-secret': secret
+        }
+    });
 }
 
 let getOrgById = async (idOrg, secret) => {
-    try {
-        const res = await Axios.get(`/orgs/getbyid/${idOrg}`, {
-            headers: {
-                'org-secret': secret
-            }
-        });
-        return res.data;
-    } catch(err) {
-        throw new Error(err.response.data);
-    }
+    return await getMethod(`/orgs/getbyid/${idOrg}`, {
+        headers: {
+            'org-secret': secret
+        }
+    });
+
 }
 
 export default {

@@ -44,7 +44,6 @@ export default {
   },
   mounted() {
     this.loadOrgs();
-    console.log(this.orgs)
   },
 };
 </script>

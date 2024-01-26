@@ -47,6 +47,7 @@ export default {
         </v-list>
       </v-menu>
     </div>
+    <h2>Heroes & Villains</h2>
 
     <v-spacer></v-spacer>
 

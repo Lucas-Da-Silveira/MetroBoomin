@@ -1,45 +1,25 @@
-import Axios from "./axios.service";
+import { getMethod, postMethod, patchMethod } from "./axios.service";
 
 let getTeams = async () => {
-    try {
-       const res = await Axios.get('/teams/get');
-       return res.data;
-    } catch(err) {
-        throw new Error(err.response.data);
-    }
+    return await getMethod('/teams/get');
 }
 
 let createTeam = async (name) => {
-    try {
-        const res = await Axios.post('/teams/create', name);
-        return res.data;
-    } catch(err) {
-        throw new Error(err.response.data);
-    }
+    return await postMethod('/teams/create', name);
 }
 
 let addHeroes = async (idHeroes, idTeam) => {
-    try {
-        const res = await Axios.patch('/teams/addheroes', {
-            idHeroes,
-            idTeam
-        });
-        return res.data;
-    } catch(err) {
-        throw new Error(err.response.data);
-    }
+    return await patchMethod('/teams/addheroes', {
+        idHeroes,
+        idTeam
+    });
 }
 
 let removeHeroes = async (idHeroes, idTeam) => {
-    try {
-        const res = await Axios.patch('/teams/removeheroes', {
-            idHeroes,
-            idTeam
-        });
-        return res.data;
-    } catch(err) {
-        throw new Error(err.response.data);
-    }
+    return await patchMethod('/teams/removeheroes', {
+        idHeroes,
+        idTeam
+    });
 }
 
 export  default {
