@@ -49,11 +49,21 @@ export default new Vuex.Store({
         },
 
         actions: {
-            async authenticateOrganization({commit}, id, password) {
+            async authenticateOrganization({commit}, password) {
                 try {
+                    const res = await orgService.getOrgs(); // FIXME: CASSé (la méthode)
+                    const orgs = res.data;
 
-                    const res = await orgService.getOrgById(id);
-                    const org = res.data.find(org => org.secret === password);
+                    let org = null;
+                    for(const org1 of orgs) {
+                        const orgDetails = await orgService.getOrgById(org1._id, password);
+                        if(orgDetails.secret === password) {
+                            org = orgDetails;
+                            break;
+                        }
+                    }
+                    console.log(`org: ${org}`);
+
                     if (org) {
                         commit('setOrgPassword', password);
                         await Promise.all([

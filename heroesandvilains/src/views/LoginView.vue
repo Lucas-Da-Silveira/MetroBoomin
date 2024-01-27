@@ -1,5 +1,5 @@
 <script>
-import {mapMutations} from "vuex";
+import {mapMutations, mapActions} from "vuex";
 export default {
   name: 'LoginView',
   data: () => ({
@@ -11,11 +11,13 @@ export default {
   }),
   methods: {
     ...mapMutations(['setOrgPassword']),
+    ...mapActions(['authenticateOrganization']),
     validate () {
       this.$refs.form.validate();
       this.valid = this.password !== '';
       if(this.valid) {
         this.setOrgPassword(this.password);
+        // this.authenticateOrganization(this.password); // FIXME: CASSé
         this.$router.push('/');
       }
     },

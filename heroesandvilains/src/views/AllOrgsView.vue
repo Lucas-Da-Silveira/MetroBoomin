@@ -18,7 +18,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['loadOrgs', 'createOrg', 'authenticateOrganization']),
+    ...mapActions(['loadOrgs', 'loadOrgDetails', 'createOrg', 'authenticateOrganization']),
     ...mapMutations(['setCurrentOrg']),
     openOrgCreationDialog() {
       this.dialogVisible = true;
@@ -29,9 +29,8 @@ export default {
       this.newOrgPassword = '';
     },
     handleClick(org) {
-      // if(this.authenticateOrganization(org._id, this.orgPassword) === null) {
-      //   return alert('Wrong password');
-      // }
+      const orgDetails = this.loadOrgDetails(org._id); // FIXME: CASSé
+      this.setCurrentOrg(orgDetails);
       this.$router.push(`/orgs/${org._id}`);
     },
     async createNewOrg() {
