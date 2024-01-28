@@ -9,6 +9,8 @@ export default {
     return {
       headers: [
         {text: 'Team Name', align: 'start', sortable: true, value: 'name'},
+        {text: 'Nb affiliations', value: 'nbAffiliations', sortable: true},
+        {text: 'Actions', value: 'actions', sortable: false},
       ],
       dialogVisible: false,
       newTeamName: '',
@@ -23,14 +25,16 @@ export default {
       this.dialogVisible = false;
       this.newTeamName = '';
     },
-    createNewTeam() {  //FIXME : mettre  en await et non try catch
-      this.createTeam({name: this.newTeamName })
-          .then(() => {
-            this.closeTeamCreationDialog();
-          })
-          .catch((error) => {
-            console.error('Error creating team:', error.message);
-          });
+    handleClick(team) {
+      this.$router.push(`/teams/${team._id}`);
+    },
+    createNewTeam() {
+      try {
+        this.createTeam({name: this.newTeamName});
+        this.closeTeamCreationDialog();
+      } catch(err) {
+        console.error(err);
+      }
     },
   },
   created() {
@@ -48,18 +52,18 @@ export default {
         class="elevation-1"
     >
 
-      <template v-slot:item.name="{ item }" >
-        <router-link :to="{ name: 'team-id', params: { id: item.id } }" class="route">
-          {{ item.name }}
-        </router-link>
-      </template>
-
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title>Teams</v-toolbar-title>
           <v-spacer/>
           <v-btn id="open-create-dialog" color="primary" @click="openTeamCreationDialog">NEW TEAM</v-btn>
         </v-toolbar>
+      </template>
+
+      <template v-slot:item.actions="{ item }">
+        <v-btn color="primary" @click="handleClick(item)">
+          INFO
+        </v-btn>
       </template>
 
     </v-data-table>
