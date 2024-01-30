@@ -10,7 +10,6 @@ export default {
       headers: [
         {text: 'Team Name', align: 'start', sortable: true, value: 'name'},
         {text: 'Nb affiliations', value: 'nbAffiliations', sortable: true},
-        {text: 'Actions', value: 'actions', sortable: false},
       ],
       dialogVisible: false,
       newTeamName: '',
@@ -60,11 +59,6 @@ export default {
         </v-toolbar>
       </template>
 
-      <template v-slot:item.actions="{ item }">
-        <v-btn color="primary" @click="handleClick(item)">
-          INFO
-        </v-btn>
-      </template>
 
     </v-data-table>
 
