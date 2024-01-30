@@ -17,7 +17,6 @@ export default {
       this.valid = this.password !== '';
       if(this.valid) {
         this.setOrgPassword(this.password);
-        // this.authenticateOrganization(this.password); // FIXME: CASSé
         this.$router.push('/');
       }
     },

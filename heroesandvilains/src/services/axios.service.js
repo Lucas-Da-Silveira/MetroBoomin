@@ -32,10 +32,10 @@ let errorHandler = (err) => {
     }
 }
 
-let getMethod = async (url) => {
+let getMethod = async (url, options) => {
     let res = null;
     try {
-        res = await axiosAgent.get(url);
+        res = await axiosAgent.get(url, options);
     } catch(err) {
         res = errorHandler(err);
     }

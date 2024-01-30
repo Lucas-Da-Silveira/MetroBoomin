@@ -4,7 +4,7 @@ import { mapState, mapActions, mapMutations } from 'vuex';
 export default {
   name: 'OrgsView',
   computed: {
-    ...mapState(['orgs', 'orgPassword']),
+    ...mapState(['orgs', 'orgPassword', 'currentOrg']),
   },
   data() {
     return {
@@ -28,10 +28,13 @@ export default {
       this.newOrgName = '';
       this.newOrgPassword = '';
     },
-    handleClick(org) {
-      const orgDetails = this.loadOrgDetails(org._id); // FIXME: CASSé
-      this.setCurrentOrg(orgDetails);
-      this.$router.push(`/orgs/${org._id}`);
+    async handleClick(org) {
+      await this.loadOrgDetails(org._id);
+      if(!this.currentOrg.error) {
+        await this.$router.push(`/orgs/${org._id}`);
+      } else {
+        alert('Wrong password for this org');
+      }
     },
     async createNewOrg() {
       try {

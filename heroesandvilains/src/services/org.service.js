@@ -28,7 +28,7 @@ let removeTeam = async (idTeam, secret) => {
 }
 
 let getOrgById = async (idOrg, secret) => {
-    return await getMethod(`/orgs/getbyid/${idOrg}`, {
+    return await getMethod(`/orgs/getbyid/${idOrg}`,{
         headers: {
             'org-secret': secret
         }
