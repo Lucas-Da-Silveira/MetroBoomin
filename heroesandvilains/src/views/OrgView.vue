@@ -5,9 +5,9 @@ export default {
 </script>
 
 <template>
-  <div>
-    OrgView
-  </div>
+  <v-container>
+    <h1>Org View</h1>
+  </v-container>
 </template>
 
 <style scoped>
