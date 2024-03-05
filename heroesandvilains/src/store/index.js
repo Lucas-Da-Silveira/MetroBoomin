@@ -108,7 +108,7 @@ export default new Vuex.Store({
                 }
             },
 
-            async loadTeamDetails({commit, state}, teamId) {
+            async loadTeamDetails({commit, state}, teamId) { // FIXME: c'est cassé
                 try {
                     const res = await teamService.getOrgById(teamId, state.orgPassword);
                     const team = res.data;
