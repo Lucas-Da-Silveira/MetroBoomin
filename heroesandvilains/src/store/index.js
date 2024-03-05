@@ -110,9 +110,9 @@ export default new Vuex.Store({
 
             async loadTeamDetails({commit, state}, teamId) {
                 try {
-                    const res = await orgService.getOrgById(teamId, state.orgPassword);
+                    const res = await teamService.getOrgById(teamId, state.orgPassword);
                     const team = res.data;
-                    team.heroes = team.heroes.map(hero => hero._id);
+                    // team.heroes = team.heroes.map(hero => hero._id);
                     commit('setCurrentTeam', team);
                 } catch (err) {
                     throw new Error(err.message);
