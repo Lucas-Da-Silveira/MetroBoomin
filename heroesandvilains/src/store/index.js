@@ -160,16 +160,16 @@ export default new Vuex.Store({
                 }
             },
 
-            async addTeam({state}, team) {
+            async addTeam({state}, teamId) {
                 try {
-                    await orgService.addTeam(team._id, state.orgPassword);
+                    await orgService.addTeam(teamId, state.orgPassword);
                     await this.dispatch('loadOrgDetails', state.currentOrg[0]._id);
                 } catch (err) {
                     throw new Error(err.message);
                 }
             },
 
-            async removeTeam({ state}, team) {
+            async removeTeam({state}, team) {
                 try {
                     await orgService.removeTeam(team._id, state.orgPassword);
                     await this.dispatch('loadOrgDetails', state.currentOrg[0]._id);

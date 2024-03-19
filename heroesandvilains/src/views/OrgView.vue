@@ -34,9 +34,8 @@ export default {
       await this.$router.push(`/teams/${team._id}`);
     },
 
-    async linkTeam() { // FIXME: ne fonctionne pas
+    async linkTeam() {
       this.linkLoading = true;
-      console.log(this.selectedTeam, this.$route.params.id);
       await this.addTeam(this.selectedTeam).then(() => {
         this.linkLoading = false;
       });
