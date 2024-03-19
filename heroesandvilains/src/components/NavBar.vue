@@ -1,4 +1,5 @@
 <script>
+
 export default {
   name: 'NavBar',
   data: () => ({
@@ -47,7 +48,7 @@ export default {
         </v-list>
       </v-menu>
     </div>
-    <h2>Heroes & Villains</h2>
+    <h2 id="nav-title" @click="$router.push('/')">Heroes & Villains</h2>
 
     <v-spacer></v-spacer>
 
@@ -64,5 +65,7 @@ export default {
 </template>
 
 <style scoped>
-
+#nav-title {
+  cursor: pointer;
+}
 </style>
