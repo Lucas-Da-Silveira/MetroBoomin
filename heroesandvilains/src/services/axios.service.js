@@ -52,10 +52,10 @@ let postMethod = async (url, data) => {
     return res.data;
 }
 
-let patchMethod = async (url, data) => {
+let patchMethod = async (url, data, options) => {
     let res = null;
     try {
-        res = await axiosAgent.patch(url, data);
+        res = await axiosAgent.patch(url, data, options);
     } catch(err) {
         res = await errorHandler(err);
     }

@@ -12,7 +12,7 @@ let createOrg = async (name, secret) => {
 }
 
 let addTeam = async (idTeam, secret) => {
-    return await patchMethod('/orgs/addteam', idTeam, {
+    return await patchMethod('/orgs/addteam', { 'idTeam': idTeam }, {
         headers: {
             'org-secret': secret
         }
@@ -20,7 +20,7 @@ let addTeam = async (idTeam, secret) => {
 }
 
 let removeTeam = async (idTeam, secret) => {
-    return await patchMethod('/orgs/removeteam', idTeam, {
+    return await patchMethod('/orgs/removeteam', { 'idTeam': idTeam }, {
         headers: {
             'org-secret': secret
         }
@@ -33,7 +33,6 @@ let getOrgById = async (idOrg, secret) => {
             'org-secret': secret
         }
     });
-
 }
 
 export default {

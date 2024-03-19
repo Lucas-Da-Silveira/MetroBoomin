@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import orgService from  '../services/org.service.js'
 import heroService from '../services/hero.service.js'
 import teamService from '../services/team.service.js'
+import vuexPersist from '../plugins/persist'
 
 Vue.use(Vuex)
 
@@ -40,12 +41,15 @@ export default new Vuex.Store({
             setCurrentOrg(state, org) {
                 state.currentOrg = org;
             },
-            addTeam(state, team) {
+            createTeam(state, team) {
                 state.teams.push(team);
             },
             addOrg(state, org) {
                 state.orgs.push(org);
-            }
+            },
+            removeTeam(state, team) {
+                state.teams = state.teams.filter(t => t._id !== team._id);
+            },
         },
 
         actions: {
@@ -141,7 +145,7 @@ export default new Vuex.Store({
             async createTeam({commit, state}, team) {
                 try {
                     const res = await teamService.createTeam(team, state.orgPassword);
-                    commit('addTeam', res.data);
+                    commit('createTeam', res.data);
                 } catch (err) {
                     throw new Error(err.message);
                 }
@@ -154,10 +158,27 @@ export default new Vuex.Store({
                 } catch(err) {
                     throw new Error(err.message);
                 }
-            }
+            },
+
+            async addTeam({state}, team) {
+                try {
+                    await orgService.addTeam(team._id, state.orgPassword);
+                    await this.dispatch('loadOrgDetails', state.currentOrg[0]._id);
+                } catch (err) {
+                    throw new Error(err.message);
+                }
+            },
+
+            async removeTeam({ state}, team) {
+                try {
+                    await orgService.removeTeam(team._id, state.orgPassword);
+                    await this.dispatch('loadOrgDetails', state.currentOrg[0]._id);
+                } catch (err) {
+                    throw new Error(err.message);
+                }
+            },
         },
-        modules: {
-        }
+        plugins: [vuexPersist]
     }
 )
 
