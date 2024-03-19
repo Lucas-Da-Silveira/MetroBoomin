@@ -49,7 +49,7 @@ export default {
 </script>
 
 <template>
-  <v-container>
+  <v-container class="container">
     <v-data-table
         :headers="headers"
         :items="currentOrg[0].teams"
@@ -93,25 +93,11 @@ export default {
         </v-btn>
       </template>
     </v-data-table>
-
-<!--    <v-dialog v-model="dialogVisible" max-width="600">-->
-<!--      <v-card>-->
-<!--        <v-card-title>Create New Org</v-card-title>-->
-<!--        <v-card-text>-->
-<!--          <v-form @submit.prevent="createNewOrg">-->
-<!--            <v-text-field v-model="newOrgName" label="Org Name"></v-text-field>-->
-<!--            <v-text-field v-model="newOrgPassword" label="Org Password"></v-text-field>-->
-<!--            <v-card-actions>-->
-<!--              <v-btn color="green" dark type="submit">Create</v-btn>-->
-<!--              <v-btn color="red" dark @click="closeOrgCreationDialog">Cancel</v-btn>-->
-<!--            </v-card-actions>-->
-<!--          </v-form>-->
-<!--        </v-card-text>-->
-<!--      </v-card>-->
-<!--    </v-dialog>-->
   </v-container>
 </template>
 
 <style scoped>
-
+.container {
+  width: 60%;
+}
 </style>
