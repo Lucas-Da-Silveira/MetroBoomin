@@ -52,6 +52,16 @@ let postMethod = async (url, data) => {
     return res.data;
 }
 
+let putMethod = async (url, data, options) => {
+    let res = null;
+    try {
+        res = await axiosAgent.put(url, data, options);
+    } catch(err) {
+        res = await errorHandler(err);
+    }
+    return res.data;
+}
+
 let patchMethod = async (url, data, options) => {
     let res = null;
     try {
@@ -75,6 +85,7 @@ let deleteMethod = async (url) => {
 export {
     getMethod,
     postMethod,
+    putMethod,
     patchMethod,
     deleteMethod
 };

@@ -1,4 +1,4 @@
-import { getMethod, postMethod, patchMethod } from "./axios.service";
+import {getMethod, postMethod, putMethod} from "./axios.service";
 
 let getHeroAliases = async () => {
     return await getMethod('/heroes/getaliases');
@@ -9,7 +9,7 @@ let createHero = async (heroData) => {
 }
 
 let updateHero = async (heroData, orgSecret) => {
-    return await patchMethod('/heroes/update', heroData, {
+    return await putMethod('/heroes/update', heroData, {
         headers: {
             'org-secret': orgSecret
         }

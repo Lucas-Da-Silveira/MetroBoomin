@@ -1,5 +1,6 @@
 <script>
 import {mapActions, mapMutations, mapState} from "vuex";
+import {forEach} from "core-js/internals/array-iteration";
 
 export default {
   name: 'TeamView',
@@ -12,7 +13,9 @@ export default {
       dialogVisible: false,
       selectToogle: false,
       selectedHero: null,
-      linkLoading: false
+      linkLoading: false,
+
+      heroes: [],
     };
   },
   computed: {
@@ -23,30 +26,43 @@ export default {
       if (this.selectToogle) {
         this.$store.dispatch('loadHeroAliases');
       }
-    }
+    },
   },
   methods: {
-    ...mapActions(['loadTeamDetails', 'addTeam', 'removeTeam']),
+    ...mapActions(['loadTeamDetails', 'addHero', 'removeHero', 'loadHeroDetails']),
     ...mapMutations(['setCurrentTeam']),
 
-    async seeTeamInfo(team) {
-      this.setCurrentTeam(team);
-      await this.$router.push(`/teams/${team._id}`);
+    async seeHeroInfo(hero) {
+      this.setCurrentTeam(hero);
+      await this.$router.push(`/heroes/${hero._id}`);
     },
 
     async linkHero() {
       this.linkLoading = true;
-      await this.addTeam(this.selectedHero).then(() => {
+      await this.addHero(this.selectedHero).then(() => {
+        this.heroes = [];
         this.linkLoading = false;
       });
+      await this.fetchHeroes();
     },
 
     async unlinkHero(hero) {
-      await this.removeTeam(hero);
+      await this.removeHero(hero).then(() => {
+        this.heroes = [];
+      });
+      await this.fetchHeroes();
+    },
+
+    async fetchHeroes() {
+      forEach(this.currentTeam.members, async (heroId) => {
+        await this.loadHeroDetails(heroId).then((hero) => {
+          this.heroes.push(hero[0]);
+        });
+      });
     }
   },
   mounted() {
-    console.log(this.currentTeam.members)
+    this.fetchHeroes();
   }
 }
 </script>
@@ -55,7 +71,7 @@ export default {
   <v-container class="container">
     <v-data-table
         :headers="headers"
-        :items="currentTeam.members"
+        :items="heroes"
         :items-per-page="5"
         class="elevation-1"
     >
@@ -88,7 +104,7 @@ export default {
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-btn color="primary" @click="seeTeamInfo(item)">
+        <v-btn color="primary" @click="seeHeroInfo(item)">
           INFO
         </v-btn>
         <v-btn color="primary" @click="unlinkHero(item)">

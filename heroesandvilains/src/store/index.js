@@ -98,6 +98,7 @@ export default new Vuex.Store({
                 try {
                     const res = await heroService.getHeroById(heroId, state.orgPassword);
                     commit('setCurrentHero', res.data);
+                    return res.data;
                 } catch (err) {
                     throw new Error(err.message);
                 }
@@ -112,11 +113,11 @@ export default new Vuex.Store({
                 }
             },
 
-            async loadTeamDetails({commit, state}, teamId) { // FIXME: c'est cassé
+            async loadTeamDetails({commit, state}, teamId) {
                 try {
-                    const res = await teamService.getOrgById(teamId, state.orgPassword);
-                    const team = res.data;
-                    // team.heroes = team.heroes.map(hero => hero._id);
+                    const org = await orgService.getOrgById(state.currentOrg[0]._id, state.orgPassword);
+                    const teams = org.data[0].teams;
+                    const team = teams.find(t => t._id === teamId);
                     commit('setCurrentTeam', team);
                 } catch (err) {
                     throw new Error(err.message);
@@ -126,7 +127,6 @@ export default new Vuex.Store({
             async loadOrgs({commit}) {
                 try {
                     const res = await orgService.getOrgs();
-                    // commit('setOrgNames', res.data.map(org => org.name)); //
                     commit('setOrgs', res.data);
                 } catch (err) {
                     throw new Error(err.message);
@@ -177,6 +177,24 @@ export default new Vuex.Store({
                     throw new Error(err.message);
                 }
             },
+
+            async addHero({state}, heroId) {
+                try {
+                    await teamService.addHeroes([heroId], state.currentTeam._id);
+                    await this.dispatch('loadTeamDetails', state.currentTeam._id);
+                } catch(err) {
+                    throw new Error(err.message);
+                }
+            },
+
+            async removeHero({state}, heroId) {
+                try {
+                    await teamService.removeHeroes([heroId], state.currentTeam._id);
+                    await this.dispatch('loadTeamDetails', state.currentTeam._id);
+                } catch(err) {
+                    throw new Error(err.message);
+                }
+            }
         },
         plugins: [vuexPersist]
     }
