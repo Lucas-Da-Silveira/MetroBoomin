@@ -13,10 +13,18 @@ export default {
       ],
       dialogVisible: false,
       newTeamName: '',
+      search: '',
     };
   },
   methods: {
     ...mapActions(['loadTeams', 'createTeam']),
+    filterText (value, search) {
+      search = search.toString().toLocaleLowerCase();
+      return value != null &&
+          search != null &&
+          typeof value === 'string' &&
+          value.toString().toLocaleLowerCase().indexOf(search) !== -1
+    },
     openTeamCreationDialog() {
       this.dialogVisible = true;
     },
@@ -49,17 +57,24 @@ export default {
         :items="teams"
         :items-per-page="5"
         class="elevation-1"
+        :search="search"
+        :custom-filter="filterText"
     >
 
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title>Teams</v-toolbar-title>
           <v-spacer/>
+          <v-text-field
+              v-model="search"
+              label="Search Team"
+              class="mx-4"
+              style="margin-top: 20px;"
+          ></v-text-field>
+          <v-spacer/>
           <v-btn id="open-create-dialog" color="primary" @click="openTeamCreationDialog">NEW TEAM</v-btn>
         </v-toolbar>
       </template>
-
-
     </v-data-table>
 
     <v-dialog v-model="dialogVisible" max-width="600">

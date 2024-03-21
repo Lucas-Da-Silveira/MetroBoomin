@@ -16,7 +16,24 @@ export default new Vuex.Store({
             teams: [],
             currentTeam: null,
             orgs: [],
-            currentOrg: null
+            currentOrg: null,
+
+            heroPowers: [
+                { name: 'Super Strength', type: 1, level: 90 },
+                { name: 'Super Speed', type: 2, level: 80 },
+                { name: 'Flight', type: 1, level: 85 },
+                { name: 'Teleportation', type: 2, level: 75 },
+                { name: 'Telekinesis', type: 3, level: 70 },
+                { name: 'Invisibility', type: 4, level: 80 },
+                { name: 'Invulnerability', type: 1, level: 95 },
+                { name: 'Telepathy', type: 5, level: 70 },
+                { name: 'X-Ray Vision', type: 6, level: 75 },
+                { name: 'Heat Vision', type: 6, level: 80 },
+                { name: 'Freeze Breath', type: 6, level: 75 },
+                { name: 'Elasticity', type: 1, level: 85 },
+                { name: 'Shapeshifting', type: 1, level: 90 },
+                { name: 'Regeneration', type: 1, level: 95 },
+            ],
         },
 
         mutations: {
@@ -46,6 +63,9 @@ export default new Vuex.Store({
             },
             addOrg(state, org) {
                 state.orgs.push(org);
+            },
+            addHero(state, hero) { // FIXME: pas sûr de ça...
+                state.heroAliases.push(hero);
             },
             removeTeam(state, team) {
                 state.teams = state.teams.filter(t => t._id !== team._id);
@@ -155,6 +175,15 @@ export default new Vuex.Store({
                 try {
                     const res = await orgService.createOrg(org.name, org.password);
                     commit('addOrg', res.data);
+                } catch(err) {
+                    throw new Error(err.message);
+                }
+            },
+
+            async createHero({commit}, hero) { // FIXME
+                try {
+                    const res = await heroService.createHero(hero);
+                    commit('addHero', res.data);
                 } catch(err) {
                     throw new Error(err.message);
                 }

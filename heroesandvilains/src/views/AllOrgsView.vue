@@ -15,11 +15,19 @@ export default {
       dialogVisible: false,
       newOrgName: '',
       newOrgPassword: '',
+      search: '',
     };
   },
   methods: {
     ...mapActions(['loadOrgs', 'loadOrgDetails', 'createOrg', 'authenticateOrganization']),
     ...mapMutations(['setCurrentOrg']),
+    filterText (value, search) {
+      search = search.toString().toLocaleLowerCase();
+      return value != null &&
+          search != null &&
+          typeof value === 'string' &&
+          value.toString().toLocaleLowerCase().indexOf(search) !== -1
+    },
     openOrgCreationDialog() {
       this.dialogVisible = true;
     },
@@ -58,10 +66,19 @@ export default {
         :items="orgs"
         :items-per-page="5"
         class="elevation-1"
+        :search="search"
+        :custom-filter="filterText"
     >
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title>Organisations</v-toolbar-title>
+          <v-spacer/>
+          <v-text-field
+              v-model="search"
+              label="Search Org"
+              class="mx-4"
+              style="margin-top: 20px;"
+          ></v-text-field>
           <v-spacer/>
           <v-btn id="open-create-dialog" color="primary" @click="openOrgCreationDialog">NEW ORG</v-btn>
         </v-toolbar>

@@ -35,16 +35,16 @@ const routes = [
     name: 'team-id',
     component: () => import('@/views/TeamView.vue')
   },
-  // {
-  //   path: '/heroes/',
-  //   name: 'heroes',
-  //   component: () => import('@/views/AllHeroesView.vue')
-  // },
-  // {
-  //   path: '/heroes/:id',
-  //   name: 'hero-id',
-  //   component: () => import('@/views/HeroView.vue')
-  // }
+  {
+    path: '/heroes/',
+    name: 'heroes',
+    component: () => import('@/views/AllHeroesView.vue')
+  },
+  {
+    path: '/heroes/:id',
+    name: 'hero-id',
+    component: () => import('@/views/HeroView.vue')
+  }
 ]
 
 const router = new VueRouter({

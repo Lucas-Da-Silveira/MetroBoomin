@@ -4,9 +4,9 @@ export default {
   name: 'NavBar',
   data: () => ({
     routes: [
-      { name: 'Home', path: '/'},
       { name: 'Organisations', path: '/orgs'},
       { name: 'Teams', path: '/teams'},
+      { name: 'Heroes', path: '/heroes'},
     ]
   }),
 };
