@@ -1,15 +1,14 @@
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 export default {
   name: 'HeroesView',
   computed: {
-    ...mapState(['heroAliases', 'heroPowers']),
+    ...mapState(['heroAliases', 'heroPowers', 'currentHero']),
   },
   data() {
     return {
       headers: [
         {text: 'Public Name', align: 'start', sortable: true, value: 'publicName'},
-        {text: 'Actions', value: 'actions', sortable: false},
       ],
       dialogVisible: false,
       search: '',
@@ -25,8 +24,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['loadHeroAliases', 'loadHeroDetails', 'createHero']),
-    ...mapMutations(['setCurrentHero']),
+    ...mapActions(['loadHeroAliases', 'createHero']),
     filterText (value, search) {
       search = search.toString().toLocaleLowerCase();
       return value != null &&
@@ -56,14 +54,6 @@ export default {
       this.newPowerLevel = 0;
 
       this.showPowerForm = false;
-    },
-    async handleClick(org) {
-      await this.loadOrgDetails(org._id);
-      if(!this.currentOrg.error) {
-        await this.$router.push(`/orgs/${org._id}`);
-      } else {
-        alert('Wrong password for this org');
-      }
     },
     async createNewHero() {
       try {
@@ -104,17 +94,11 @@ export default {
               v-model="search"
               label="Search Hero"
               append-icon="mdi-magnify"
-              class="mx-4"
               style="margin-top: 20px;"
           ></v-text-field>
           <v-spacer/>
           <v-btn id="open-create-dialog" color="primary" @click="openHeroCreationDialog">NEW HERO</v-btn>
         </v-toolbar>
-      </template>
-      <template v-slot:item.actions="{ item }">
-        <v-btn color="primary" @click="handleClick(item)">
-          INFO
-        </v-btn>
       </template>
     </v-data-table>
 

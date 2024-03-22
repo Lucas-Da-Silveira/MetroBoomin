@@ -1,6 +1,6 @@
 <script>
 // Todo : Faire en sorte de ne pas pouvoir créer une equipe vide  de même pour org
-import { mapState, mapActions, mapMutations } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 export default {
   name: 'OrgsView',
   computed: {
@@ -20,7 +20,6 @@ export default {
   },
   methods: {
     ...mapActions(['loadOrgs', 'loadOrgDetails', 'createOrg', 'authenticateOrganization']),
-    ...mapMutations(['setCurrentOrg']),
     filterText (value, search) {
       search = search.toString().toLocaleLowerCase();
       return value != null &&

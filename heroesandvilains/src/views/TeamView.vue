@@ -33,7 +33,7 @@ export default {
     ...mapMutations(['setCurrentTeam']),
 
     async seeHeroInfo(hero) {
-      this.setCurrentTeam(hero);
+      this.loadHeroDetails(hero._id);
       await this.$router.push(`/heroes/${hero._id}`);
     },
 

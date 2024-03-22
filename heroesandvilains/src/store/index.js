@@ -180,7 +180,7 @@ export default new Vuex.Store({
                 }
             },
 
-            async createHero({commit}, hero) { // FIXME
+            async createHero({commit}, hero) {
                 try {
                     const res = await heroService.createHero(hero);
                     commit('addHero', res.data);
