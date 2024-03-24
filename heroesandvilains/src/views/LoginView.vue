@@ -26,28 +26,34 @@ export default {
 
 <template>
   <v-container>
-    <v-form
-        ref="form"
-        v-model="valid"
-        lazy-validation
-        style="width: 30%; margin: auto;"
-    >
-      <v-text-field
-          v-model="password"
-          :rules="passwordRules"
-          label="Password"
-          required
-      ></v-text-field>
+    <v-card style="width: 50%; margin: 0 auto;">
+      <v-card-title>Login</v-card-title>
+      <v-card-text>
+        <v-form
+            ref="form"
+            v-model="valid"
+            lazy-validation
+        >
+          <v-text-field
+              v-model="password"
+              :rules="passwordRules"
+              label="Password"
+              required
+          ></v-text-field>
+        </v-form>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn
+            :disabled="!valid"
+            color="success"
+            class="mr-4"
+            @click="validate"
+        >
+          Login
+        </v-btn>
+      </v-card-actions>
+    </v-card>
 
-      <v-btn
-          :disabled="!valid"
-          color="success"
-          class="mr-4"
-          @click="validate"
-      >
-        Login
-      </v-btn>
-    </v-form>
   </v-container>
 </template>
 

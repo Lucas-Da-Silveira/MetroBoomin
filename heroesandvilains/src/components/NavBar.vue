@@ -1,5 +1,7 @@
 <script>
 
+import {mapMutations, mapState} from "vuex";
+
 export default {
   name: 'NavBar',
   data: () => ({
@@ -9,6 +11,15 @@ export default {
       { name: 'Heroes', path: '/heroes'},
     ]
   }),
+  computed: {
+    ...mapState(['orgPassword']),
+  },
+  methods: {
+    ...mapMutations(['setOrgPassword']),
+    logout() {
+      this.setOrgPassword('');
+    },
+  }
 };
 </script>
 
@@ -52,13 +63,28 @@ export default {
 
     <v-spacer></v-spacer>
 
-    <router-link to="/login">
+    <router-link v-if="orgPassword === ''" to="/login">
       <v-btn
           elevation="2"
           text
       >
-        <span class="mr-2">Login</span>
-        <v-icon color="white">mdi-account</v-icon>
+        Login
+        <v-icon
+            right
+            dark
+        >mdi-account</v-icon>
+      </v-btn>
+    </router-link>
+    <router-link v-else to="">
+      <v-btn
+          elevation="2"
+          text
+          @click="logout">
+        Logout
+        <v-icon
+            right
+            dark
+        >mdi-logout</v-icon>
       </v-btn>
     </router-link>
   </v-app-bar>
