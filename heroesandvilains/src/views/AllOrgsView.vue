@@ -20,13 +20,6 @@ export default {
   },
   methods: {
     ...mapActions(['loadOrgs', 'loadOrgDetails', 'createOrg', 'authenticateOrganization']),
-    filterText (value, search) {
-      search = search.toString().toLocaleLowerCase();
-      return value != null &&
-          search != null &&
-          typeof value === 'string' &&
-          value.toString().toLocaleLowerCase().indexOf(search) !== -1
-    },
     openOrgCreationDialog() {
       this.dialogVisible = true;
     },
@@ -66,7 +59,6 @@ export default {
         :items-per-page="5"
         class="elevation-1"
         :search="search"
-        :custom-filter="filterText"
     >
       <template v-slot:top>
         <v-toolbar flat>

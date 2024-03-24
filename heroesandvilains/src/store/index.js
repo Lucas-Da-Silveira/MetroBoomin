@@ -189,6 +189,15 @@ export default new Vuex.Store({
                 }
             },
 
+            async updateHero({state}, hero) {
+                try {
+                    await heroService.updateHero(hero, state.orgPassword);
+                    await this.dispatch('loadHeroDetails', hero._id);
+                } catch (err) {
+                    throw new Error(err.message);
+                }
+            },
+
             async addTeam({state}, teamId) {
                 try {
                     await orgService.addTeam(teamId, state.orgPassword);

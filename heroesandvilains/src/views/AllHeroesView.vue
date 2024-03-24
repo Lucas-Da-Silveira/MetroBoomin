@@ -25,18 +25,12 @@ export default {
   },
   methods: {
     ...mapActions(['loadHeroAliases', 'createHero']),
-    filterText (value, search) {
-      search = search.toString().toLocaleLowerCase();
-      return value != null &&
-          search != null &&
-          typeof value === 'string' &&
-          value.toString().toLocaleLowerCase().indexOf(search) !== -1
-    },
     openHeroCreationDialog() {
       this.dialogVisible = true;
     },
     closeHeroCreationDialog() {
       this.dialogVisible = false;
+      this.showPowerForm = false;
     },
     addNewPower() {
       const typeIndex = this.powerTypes.indexOf(this.newPowerType);
@@ -84,7 +78,6 @@ export default {
         :items-per-page="5"
         class="elevation-1"
         :search="search"
-        :custom-filter="filterText"
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -110,14 +103,21 @@ export default {
             <v-text-field v-model="newHeroPublicName" label="Public Name"></v-text-field>
             <v-text-field v-model="newHeroRealName" label="Real Name"></v-text-field>
 
-            <v-btn @click="showPowerForm = true">New Power</v-btn>
+            <v-btn v-if="!showPowerForm" @click="showPowerForm = true" color="primary" style="margin-bottom: 20px;">New Power</v-btn>
 
-            <v-form v-if="showPowerForm">
-              <v-text-field v-model="newPowerName" label="Power Name"></v-text-field>
-              <v-select v-model="newPowerType" :items="powerTypes" label="Power Type"></v-select>
-              <v-slider v-model="newPowerLevel" label="Power Level" thumb-label></v-slider>
-              <v-btn @click="addNewPower">Save Power</v-btn>
-            </v-form>
+            <v-card v-if="showPowerForm" style="margin-bottom: 20px;">
+              <v-form>
+                <v-card-text>
+                  <v-text-field v-model="newPowerName" label="Power Name"></v-text-field>
+                  <v-select v-model="newPowerType" :items="powerTypes" label="Power Type"></v-select>
+                  <v-slider v-model="newPowerLevel" label="Power Level" thumb-label></v-slider>
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn @click="addNewPower" color="primary">SAVE POWER</v-btn>
+                  <v-btn @click="showPowerForm = false">CANCEL</v-btn>
+                </v-card-actions>
+              </v-form>
+            </v-card>
 
             <v-combobox
                 v-model="selectedPowers"

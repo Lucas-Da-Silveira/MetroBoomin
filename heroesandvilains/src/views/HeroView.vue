@@ -1,5 +1,5 @@
 <script>
-import { mapState,  } from 'vuex';
+import {mapActions, mapState} from 'vuex';
 
 export default {
   name: 'HeroView',
@@ -18,23 +18,93 @@ export default {
         powers: []
       },
       isChanged: false,
+      deleteDialogVisible: false,
+      createDialogVisible: false,
+      powerToRemove: {
+        name: '',
+        type: 0,
+        level: 0
+      },
+      newPower: {
+        name: '',
+        type: 0,
+        level: 0
+      },
+      search: '',
     }
   },
   computed: {
     ...mapState(['currentHero']),
   },
   methods: {
+    ...mapActions(['updateHero']),
     checkIfChanged() {
       this.isChanged = this.heroData.publicName !== this.currentHero[0].publicName ||
           this.heroData.realName !== this.currentHero[0].realName ||
-          this.heroData.powers !== this.currentHero[0].powers;
+          JSON.stringify(this.heroData.powers) !== JSON.stringify(this.currentHero[0].powers);
     },
     fetchHeroData() {
       this.heroData = {
+        _id: this.currentHero[0]._id,
         publicName: this.currentHero[0].publicName,
         realName: this.currentHero[0].realName,
-        powers: this.currentHero[0].powers
-      }
+        powers: JSON.parse(JSON.stringify(this.currentHero[0].powers))
+      };
+      this.checkIfChanged();
+    },
+    getPowerType(type) {
+      return this.powerTypes[type - 1];
+    },
+    openConfirmDialog(power) {
+      this.powerToRemove = power;
+      this.deleteDialogVisible = true;
+    },
+    closeConfirmDialog() {
+      this.deleteDialogVisible = false;
+      this.powerToRemove = {
+        name: '',
+        type: 0,
+        level: 0
+      };
+    },
+    openPowerCreationDialog() {
+      this.createDialogVisible = true;
+    },
+    closePowerCreationDialog() {
+      this.createDialogVisible = false;
+      this.newPower = {
+        name: '',
+        type: 0,
+        level: 0
+      };
+    },
+    addNewPower() {
+      const typeIndex = this.powerTypes.indexOf(this.newPower.type);
+      this.newPower.type = typeIndex + 1;
+
+      this.heroData.powers.push(this.newPower);
+      this.checkIfChanged();
+
+      this.newPower = {
+        name: '',
+        type: 0,
+        level: 0
+      };
+      this.closePowerCreationDialog();
+    },
+
+    removePower(power) {
+      this.heroData.powers = this.heroData.powers.filter(p => p.name !== power.name);
+      this.closeConfirmDialog();
+      this.checkIfChanged();
+    },
+
+    async saveHero() {
+      await this.updateHero(this.heroData).then(() => {
+        this.fetchHeroData();
+      });
+
+      this.checkIfChanged();
     }
   },
   mounted() {
@@ -47,48 +117,102 @@ export default {
   <v-container>
     <v-card>
       <v-card-title>{{ currentHero[0].publicName }} ({{ currentHero[0].realName }})</v-card-title>
-      <v-text-field
-          label="Public Name"
-          v-model="heroData.publicName"
-          @change="checkIfChanged"
-      ></v-text-field>
-      <v-text-field
-          label="Real Name"
-          v-model="heroData.realName"
-          @change="checkIfChanged"
-      ></v-text-field>
+      <v-card-text>
+        <div class="hero-info">
+          <v-text-field
+              class="infos"
+              label="Public Name"
+              v-model="heroData.publicName"
+              @change="checkIfChanged"
+          ></v-text-field>
+          <v-text-field
+              class="infos"
+              label="Real Name"
+              v-model="heroData.realName"
+              @change="checkIfChanged"
+          ></v-text-field>
+        </div>
 
-      <!-- TODO: finir de remplir le tableau et faire le edit d'un héros -->
-      <v-data-table
-          :headers="headers"
-          :items="heroData.powers"
-          item-key="name"
-          :items-per-page="5"
-          class="elevation-1"
-          @change="checkIfChanged"
-      >
-        <template v-slot:top>
-          <v-toolbar flat>
-            <v-toolbar-title>Powers</v-toolbar-title>
-            <v-spacer/>
-            <v-text-field
-                v-model="search"
-                label="Search Power"
-                append-icon="mdi-magnify"
-                class="mx-4"
-                style="margin-top: 20px;"
-            ></v-text-field>
-            <v-spacer/>
-            <v-btn id="open-create-dialog" color="primary" @click="openHeroCreationDialog">ADD POWER</v-btn>
-          </v-toolbar>
-        </template>
-      </v-data-table>
+        <v-data-table
+            :headers="headers"
+            :items="heroData.powers.map(power => ({...power, type: getPowerType(power.type)}))"
+            item-key="name"
+            :items-per-page="5"
+            class="elevation-1"
+            :search="search"
+            @change="checkIfChanged"
+        >
+          <template v-slot:top>
+            <v-toolbar flat>
+              <v-toolbar-title>Powers</v-toolbar-title>
+              <v-spacer/>
+              <v-text-field
+                  v-model="search"
+                  label="Search Power"
+                  append-icon="mdi-magnify"
+                  class="mx-4"
+                  style="margin-top: 20px;"
+              ></v-text-field>
+              <v-spacer/>
+              <v-btn id="open-create-dialog" color="primary" @click="openPowerCreationDialog">ADD POWER</v-btn>
+            </v-toolbar>
+          </template>
+          <template v-slot:item.actions="{ item }">
+            <v-btn color="error" @click="openConfirmDialog(item)" icon>
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </template>
+        </v-data-table>
+      </v-card-text>
 
-      <v-btn color="primary" :disabled="!isChanged">Save</v-btn>
+      <v-card-actions>
+        <v-btn color="primary" :disabled="!isChanged" @click="saveHero">SAVE</v-btn>
+        <v-btn v-if="isChanged" color="error" @click="fetchHeroData">CANCEL</v-btn>
+      </v-card-actions>
     </v-card>
+
+    <v-dialog v-model="deleteDialogVisible" max-width="400">
+      <v-card>
+        <v-card-title>Are you sure?</v-card-title>
+        <v-card-text>
+          You are about to remove <b>{{ powerToRemove.name }}</b> from the hero.
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="green" dark @click="removePower(powerToRemove)">CONFIRM</v-btn>
+          <v-btn color="red" dark @click="closeConfirmDialog">CANCEL</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="createDialogVisible" max-width="600">
+      <v-card>
+        <v-card-title>Add New Power</v-card-title>
+        <v-form @submit.prevent="addNewPower">
+          <v-card-text>
+            <v-text-field v-model="newPower.name" label="Power Name"></v-text-field>
+            <v-select v-model="newPower.type" :items="powerTypes" label="Power Type"></v-select>
+            <v-slider v-model="newPower.level" label="Power Level" thumb-label></v-slider>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn type="submit" color="primary">SAVE POWER</v-btn>
+            <v-btn @click="closePowerCreationDialog">CANCEL</v-btn>
+          </v-card-actions>
+        </v-form>
+      </v-card>
+    </v-dialog>
+
   </v-container>
 </template>
 
 <style scoped>
+.hero-info {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
 
+.infos {
+  width: 50%;
+  margin: 0 20px;
+}
 </style>

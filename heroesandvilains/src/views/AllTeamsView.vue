@@ -18,13 +18,6 @@ export default {
   },
   methods: {
     ...mapActions(['loadTeams', 'createTeam']),
-    filterText (value, search) {
-      search = search.toString().toLocaleLowerCase();
-      return value != null &&
-          search != null &&
-          typeof value === 'string' &&
-          value.toString().toLocaleLowerCase().indexOf(search) !== -1
-    },
     openTeamCreationDialog() {
       this.dialogVisible = true;
     },
@@ -58,7 +51,6 @@ export default {
         :items-per-page="5"
         class="elevation-1"
         :search="search"
-        :custom-filter="filterText"
     >
 
       <template v-slot:top>
