@@ -1,7 +1,8 @@
 import Axios from 'axios';
 
 let axiosAgent = Axios.create({
-    baseURL: 'https://apidemo.iut-bm.univ-fcomte.fr/herocorp'
+    baseURL: 'https://apidemo.iut-bm.univ-fcomte.fr/herocorp',
+    withCredentials: true
 });
 
 let errorHandler = (err) => {
