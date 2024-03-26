@@ -9,7 +9,7 @@ export default {
         { text: "Name", value: "name" },
         { text: "Type", value: "type" },
         { text: "Level", value: "level" },
-        { text: "Actions", value: "actions" }
+        { text: "Actions", value: "actions", sortable: false }
       ],
       powerTypes: ['Force', 'Vitesse', 'Endurance', 'Magie', 'Effrayant', 'Furtivité', 'Stupidité'],
       heroData: {

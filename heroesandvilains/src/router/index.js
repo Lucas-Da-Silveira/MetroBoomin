@@ -18,32 +18,32 @@ const routes = [
   {
     path: '/orgs',
     name: 'orgs',
-    component: () => import('@/views/AllOrgsView.vue'),
+    component: () => import('@/views/Orgs/AllOrgsView.vue'),
   },
   {
     path: '/orgs/:id',
     name: 'org-id',
-    component: () => import('@/views/OrgView.vue')
+    component: () => import('@/views/Orgs/OrgView.vue')
   },
   {
     path: '/teams',
     name: 'teams',
-    component: () => import('@/views/AllTeamsView.vue'),
+    component: () => import('@/views/Teams/AllTeamsView.vue'),
   },
   {
     path: '/teams/:id',
     name: 'team-id',
-    component: () => import('@/views/TeamView.vue')
+    component: () => import('@/views/Teams/TeamView.vue')
   },
   {
     path: '/heroes/',
     name: 'heroes',
-    component: () => import('@/views/AllHeroesView.vue')
+    component: () => import('@/views/Heroes/AllHeroesView.vue')
   },
   {
     path: '/heroes/:id',
     name: 'hero-id',
-    component: () => import('@/views/HeroView.vue')
+    component: () => import('@/views/Heroes/HeroView.vue')
   }
 ]
 

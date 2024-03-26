@@ -47,15 +47,11 @@ export default {
         </template>
 
         <v-list>
-          <router-link v-for="route in routes"
-                       :key="route.path"
-                       :to="route.path">
-            <v-list-item link>
+            <v-list-item v-for="(route, index) in routes" :key="index" @click="$router.push(`${route.path}`)">
               <v-list-item-title>
                 {{ route.name }}
               </v-list-item-title>
             </v-list-item>
-          </router-link>
         </v-list>
       </v-menu>
     </div>
