@@ -1,10 +1,9 @@
 <script>
-// Todo : Faire en sorte de ne pas pouvoir créer une equipe vide  de même pour org
 import { mapState, mapActions } from 'vuex';
 export default {
   name: 'OrgsView',
   computed: {
-    ...mapState(['orgs', 'orgPassword', 'currentOrg']),
+    ...mapState('appdataStore', ['orgs', 'orgPassword', 'currentOrg']),
   },
   data() {
     return {
@@ -19,7 +18,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['loadOrgs', 'loadOrgDetails', 'createOrg', 'authenticateOrganization']),
+    ...mapActions('appdataStore', ['loadOrgs', 'loadOrgDetails', 'createOrg', 'authenticateOrganization']),
     openOrgCreationDialog() {
       this.dialogVisible = true;
     },

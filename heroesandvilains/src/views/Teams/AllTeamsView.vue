@@ -3,7 +3,7 @@ import { mapState, mapActions } from 'vuex';
 export default {
   name: 'TeamsView',
   computed: {
-    ...mapState(['teams']),
+    ...mapState('appdataStore', ['teams']),
   },
   data() {
     return {
@@ -17,7 +17,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['loadTeams', 'createTeam']),
+    ...mapActions('appdataStore', ['loadTeams', 'createTeam']),
     openTeamCreationDialog() {
       this.dialogVisible = true;
     },

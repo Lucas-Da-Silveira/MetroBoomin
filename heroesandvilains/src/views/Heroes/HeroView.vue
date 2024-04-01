@@ -34,10 +34,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['currentHero']),
+    ...mapState('appdataStore', ['currentHero']),
   },
   methods: {
-    ...mapActions(['updateHero']),
+    ...mapActions('appdataStore', ['updateHero']),
     checkIfChanged() {
       this.isChanged = this.heroData.publicName !== this.currentHero[0].publicName ||
           this.heroData.realName !== this.currentHero[0].realName ||

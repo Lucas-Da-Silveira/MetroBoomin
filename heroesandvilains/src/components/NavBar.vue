@@ -12,10 +12,10 @@ export default {
     ]
   }),
   computed: {
-    ...mapState(['orgPassword']),
+    ...mapState('appdataStore', ['orgPassword']),
   },
   methods: {
-    ...mapMutations(['setOrgPassword']),
+    ...mapMutations('appdataStore', ['setOrgPassword']),
     logout() {
       this.setOrgPassword('');
     },

@@ -10,8 +10,8 @@ export default {
     ],
   }),
   methods: {
-    ...mapMutations(['setOrgPassword']),
-    ...mapActions(['authenticateOrganization']),
+    ...mapMutations('appdataStore', ['setOrgPassword']),
+    ...mapActions('appdataStore', ['authenticateOrganization']),
     validate () {
       this.$refs.form.validate();
       this.valid = this.password !== '';

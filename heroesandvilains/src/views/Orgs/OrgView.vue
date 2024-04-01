@@ -16,18 +16,18 @@ export default {
     };
   },
   computed: {
-    ...mapState(['currentOrg', 'currentTeam', 'teams']),
+    ...mapState('appdataStore', ['currentOrg', 'currentTeam', 'teams']),
   },
   watch: {
     selectToogle() {
       if (this.selectToogle) {
-        this.$store.dispatch('loadTeams');
+        this.loadTeams();
       }
     }
   },
   methods: {
-    ...mapActions(['loadTeamDetails', 'addTeam', 'removeTeam']),
-    ...mapMutations(['setCurrentTeam']),
+    ...mapActions('appdataStore', ['loadTeams', 'loadTeamDetails', 'addTeam', 'removeTeam']),
+    ...mapMutations('appdataStore', ['setCurrentTeam']),
 
     async seeTeamInfo(team) {
       this.setCurrentTeam(team);

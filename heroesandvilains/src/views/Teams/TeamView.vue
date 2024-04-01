@@ -19,18 +19,18 @@ export default {
     };
   },
   computed: {
-    ...mapState(['currentOrg', 'currentTeam', 'heroAliases']),
+    ...mapState('appdataStore', ['currentOrg', 'currentTeam', 'heroAliases']),
   },
   watch: {
     selectToogle() {
       if (this.selectToogle) {
-        this.$store.dispatch('loadHeroAliases');
+        this.loadHeroAliases();
       }
     },
   },
   methods: {
-    ...mapActions(['loadTeamDetails', 'addHero', 'removeHero', 'loadHeroDetails']),
-    ...mapMutations(['setCurrentTeam']),
+    ...mapActions('appdataStore', ['loadHeroAliases', 'loadTeamDetails', 'addHero', 'removeHero', 'loadHeroDetails']),
+    ...mapMutations('appdataStore', ['setCurrentTeam']),
 
     async seeHeroInfo(hero) {
       await this.loadHeroDetails(hero._id);

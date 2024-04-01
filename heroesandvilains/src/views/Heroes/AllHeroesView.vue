@@ -3,7 +3,7 @@ import { mapState, mapActions } from 'vuex';
 export default {
   name: 'HeroesView',
   computed: {
-    ...mapState(['heroAliases', 'heroPowers', 'currentHero']),
+    ...mapState('appdataStore', ['heroAliases', 'heroPowers', 'currentHero']),
   },
   data() {
     return {
@@ -24,7 +24,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['loadHeroAliases', 'createHero']),
+    ...mapActions('appdataStore', ['loadHeroAliases', 'createHero']),
     openHeroCreationDialog() {
       this.dialogVisible = true;
     },
