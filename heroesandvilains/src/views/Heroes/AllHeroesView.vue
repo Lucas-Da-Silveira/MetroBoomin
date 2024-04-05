@@ -20,12 +20,16 @@ export default {
       newPowerName: '',
       newPowerType: null,
       newPowerLevel: 0,
-      powerTypes: ['Force', 'Vitesse', 'Endurance', 'Magie', 'Effrayant', 'Furtivité', 'Stupidité']
+      powerTypes: ['Force', 'Vitesse', 'Endurance', 'Magie', 'Effrayant', 'Furtivité', 'Stupidité'],
+
+      notifOn: false,
+      notifMsg: ''
     };
   },
   methods: {
     ...mapActions('appdataStore', ['loadHeroAliases', 'createHero']),
     ...mapMutations('errorStore', ['pushError']),
+    ...mapMutations('appdataStore', ['showNotif']),
     openHeroCreationDialog() {
       this.dialogVisible = true;
     },
@@ -63,10 +67,11 @@ export default {
         await this.createHero({publicName: this.newHeroPublicName, realName: this.newHeroRealName, powers: this.selectedPowers});
 
         this.closeHeroCreationDialog();
+        this.showNotif({msg: "Hero created successfully.", type: "success", color: "green"});
       } catch(err) {
         console.error(err);
       }
-    },
+    }
   },
   mounted() {
     this.loadHeroAliases();

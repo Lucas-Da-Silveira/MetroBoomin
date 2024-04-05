@@ -1,9 +1,11 @@
 <script>
 import {mapActions, mapMutations, mapState} from "vuex";
 import {forEach} from "core-js/internals/array-iteration";
+import NotificationAlert from "@/components/NotificationAlert.vue";
 
 export default {
   name: 'TeamView',
+  components: {NotificationAlert},
   data() {
     return {
       headers: [
@@ -30,7 +32,7 @@ export default {
   },
   methods: {
     ...mapActions('appdataStore', ['loadHeroAliases', 'loadTeamDetails', 'addHero', 'removeHero', 'loadHeroDetails']),
-    ...mapMutations('appdataStore', ['setCurrentTeam']),
+    ...mapMutations('appdataStore', ['setCurrentTeam', 'showNotif']),
 
     async seeHeroInfo(hero) {
       await this.loadHeroDetails(hero._id);
@@ -44,6 +46,7 @@ export default {
         this.linkLoading = false;
       });
       await this.fetchHeroes();
+      this.showNotif({msg: "Hero linked successfully.", type: "success", color: "blue"});
     },
 
     async unlinkHero(hero) {
@@ -51,6 +54,7 @@ export default {
         this.heroes = [];
       });
       await this.fetchHeroes();
+      this.showNotif({msg: "Hero unlinked successfully.", type: "success", color: "red"});
     },
 
     async fetchHeroes() {
@@ -69,6 +73,7 @@ export default {
 
 <template>
   <v-container class="container">
+    <NotificationAlert></NotificationAlert>
     <v-data-table
         :headers="headers"
         :items="heroes"

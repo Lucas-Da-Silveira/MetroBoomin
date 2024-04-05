@@ -1,7 +1,9 @@
 <script>
-import { mapState, mapActions } from 'vuex';
+import {mapState, mapActions, mapMutations} from 'vuex';
+import NotificationAlert from "@/components/NotificationAlert.vue";
 export default {
   name: 'TeamsView',
+  components: {NotificationAlert},
   computed: {
     ...mapState('appdataStore', ['teams']),
   },
@@ -18,6 +20,7 @@ export default {
   },
   methods: {
     ...mapActions('appdataStore', ['loadTeams', 'createTeam']),
+    ...mapMutations('appdataStore', ['showNotif']),
     openTeamCreationDialog() {
       this.dialogVisible = true;
     },
@@ -25,13 +28,11 @@ export default {
       this.dialogVisible = false;
       this.newTeamName = '';
     },
-    handleClick(team) {
-      this.$router.push(`/teams/${team._id}`);
-    },
     createNewTeam() {
       try {
         this.createTeam({name: this.newTeamName});
         this.closeTeamCreationDialog();
+        this.showNotif({msg: "Team created successfully.", type: "success", color: "green"});
       } catch(err) {
         console.error(err);
       }
@@ -45,6 +46,7 @@ export default {
 
 <template>
  <v-container class="container">
+   <NotificationAlert></NotificationAlert>
     <v-data-table
         :headers="headers"
         :items="teams"
@@ -61,6 +63,7 @@ export default {
               v-model="search"
               label="Search Team"
               class="mx-4"
+              append-icon="mdi-magnify"
               style="margin-top: 20px;"
           ></v-text-field>
           <v-spacer/>

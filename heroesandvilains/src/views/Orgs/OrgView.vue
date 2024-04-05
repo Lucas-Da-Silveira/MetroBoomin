@@ -1,8 +1,10 @@
 <script>
 import {mapActions, mapMutations, mapState} from "vuex";
+import NotificationAlert from "@/components/NotificationAlert.vue";
 
 export default {
   name: 'OrgView',
+  components: {NotificationAlert},
   data() {
     return {
       headers: [
@@ -27,7 +29,7 @@ export default {
   },
   methods: {
     ...mapActions('appdataStore', ['loadTeams', 'loadTeamDetails', 'addTeam', 'removeTeam']),
-    ...mapMutations('appdataStore', ['setCurrentTeam']),
+    ...mapMutations('appdataStore', ['setCurrentTeam', 'showNotif']),
 
     async seeTeamInfo(team) {
       this.setCurrentTeam(team);
@@ -39,10 +41,12 @@ export default {
       await this.addTeam(this.selectedTeam).then(() => {
         this.linkLoading = false;
       });
+      this.showNotif({msg: "Team linked successfully.", type: "success", color: "blue"});
     },
 
     async unlinkTeam(team) {
       await this.removeTeam(team);
+      this.showNotif({msg: "Team unlinked successfully.", type: "success", color: "red"});
     }
   },
 }
@@ -50,6 +54,7 @@ export default {
 
 <template>
   <v-container class="container">
+    <NotificationAlert></NotificationAlert>
     <v-data-table
         :headers="headers"
         :items="currentOrg[0].teams"

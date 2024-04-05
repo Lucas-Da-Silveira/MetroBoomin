@@ -7,7 +7,7 @@ export default {
     width: String,
   },
   computed: {
-    ...mapState('errorStore', ['isError','errorMsg'])
+    ...mapState('errorStore', ['isError', 'errorMsg'])
   },
   methods: {
     ...mapMutations('errorStore', ['popError'])

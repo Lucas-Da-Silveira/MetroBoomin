@@ -29,6 +29,11 @@ const appdataStore = {
             { name: 'Shapeshifting', type: 1, level: 90 },
             { name: 'Regeneration', type: 1, level: 95 },
         ],
+
+        notifOn: false,
+        notifMsg: '',
+        notifType: '',
+        notifColor: '',
     },
     mutations: {
         setOrgPassword(state, password) {
@@ -64,6 +69,16 @@ const appdataStore = {
         removeTeam(state, team) {
             state.teams = state.teams.filter(t => t._id !== team._id);
         },
+
+        showNotif(state, settings) {
+            state.notifMsg = settings.msg;
+            state.notifType = settings.type;
+            state.notifColor = settings.color;
+            state.notifOn = true;
+            setTimeout(() => {
+                state.notifOn = false;
+            }, 4000);
+        }
     },
     actions: {
         async authenticateOrganization({commit, dispatch}, password) {

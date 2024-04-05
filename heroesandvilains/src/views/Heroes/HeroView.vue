@@ -1,8 +1,10 @@
 <script>
-import {mapActions, mapState} from 'vuex';
+import {mapActions, mapMutations, mapState} from 'vuex';
+import NotificationAlert from "@/components/NotificationAlert.vue";
 
 export default {
   name: 'HeroView',
+  components: {NotificationAlert},
   data() {
     return {
       headers: [
@@ -38,6 +40,7 @@ export default {
   },
   methods: {
     ...mapActions('appdataStore', ['updateHero']),
+    ...mapMutations('appdataStore', ['showNotif']),
     checkIfChanged() {
       this.isChanged = this.heroData.publicName !== this.currentHero[0].publicName ||
           this.heroData.realName !== this.currentHero[0].realName ||
@@ -91,12 +94,16 @@ export default {
         level: 0
       };
       this.closePowerCreationDialog();
+
+      this.showNotif({msg: "Power added successfully.", type: "success", color: "green"});
     },
 
     removePower(power) {
       this.heroData.powers = this.heroData.powers.filter(p => p.name !== power.name);
       this.closeConfirmDialog();
       this.checkIfChanged();
+
+      this.showNotif({msg: "Power removed successfully.", type: "success", color: "red"});
     },
 
     async saveHero() {
@@ -104,6 +111,7 @@ export default {
         this.fetchHeroData();
       });
 
+      this.showNotif({msg: "Hero updated successfully.", type: "info", color: "blue"});
       this.checkIfChanged();
     }
   },
@@ -115,6 +123,7 @@ export default {
 
 <template>
   <v-container>
+    <NotificationAlert></NotificationAlert>
     <v-card>
       <v-card-title>{{ currentHero[0].publicName }} ({{ currentHero[0].realName }})</v-card-title>
       <v-card-text>

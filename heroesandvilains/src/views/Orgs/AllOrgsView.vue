@@ -1,7 +1,9 @@
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex';
+import NotificationAlert from "@/components/NotificationAlert.vue";
 export default {
   name: 'OrgsView',
+  components: {NotificationAlert},
   computed: {
     ...mapState('appdataStore', ['orgs', 'orgPassword', 'currentOrg']),
   },
@@ -15,11 +17,15 @@ export default {
       newOrgName: '',
       newOrgPassword: '',
       search: '',
+
+      notifOn: false,
+      notifMsg: ''
     };
   },
   methods: {
     ...mapActions('appdataStore', ['loadOrgs', 'loadOrgDetails', 'createOrg', 'authenticateOrganization']),
     ...mapMutations('errorStore', ['pushError']),
+    ...mapMutations('appdataStore', ['showNotif']),
     openOrgCreationDialog() {
       this.dialogVisible = true;
     },
@@ -40,10 +46,11 @@ export default {
       try {
         await this.createOrg({name: this.newOrgName, password: this.newOrgPassword});
         this.closeOrgCreationDialog();
+        this.showNotif({msg: "Organisation created successfully.", type: "success", color: "green"});
       } catch(err) {
         console.error(err);
       }
-    },
+    }
   },
   mounted() {
     this.loadOrgs();
@@ -53,6 +60,7 @@ export default {
 
 <template>
   <v-container class="container">
+    <NotificationAlert></NotificationAlert>
     <v-data-table
         :headers="headers"
         :items="orgs"
@@ -68,6 +76,7 @@ export default {
               v-model="search"
               label="Search Org"
               class="mx-4"
+              append-icon="mdi-magnify"
               style="margin-top: 20px;"
           ></v-text-field>
           <v-spacer/>
