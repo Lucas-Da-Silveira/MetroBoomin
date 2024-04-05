@@ -1,5 +1,5 @@
 <script>
-import { mapState, mapActions } from 'vuex';
+import {mapState, mapActions, mapMutations} from 'vuex';
 export default {
   name: 'HeroesView',
   computed: {
@@ -25,12 +25,17 @@ export default {
   },
   methods: {
     ...mapActions('appdataStore', ['loadHeroAliases', 'createHero']),
+    ...mapMutations('errorStore', ['pushError']),
     openHeroCreationDialog() {
       this.dialogVisible = true;
     },
     closeHeroCreationDialog() {
       this.dialogVisible = false;
       this.showPowerForm = false;
+
+      this.newHeroPublicName = '';
+      this.newHeroRealName = '';
+      this.selectedPowers = [];
     },
     addNewPower() {
       const typeIndex = this.powerTypes.indexOf(this.newPowerType);
@@ -51,12 +56,11 @@ export default {
     },
     async createNewHero() {
       try {
-        // console.log({publicName: this.newHeroPublicName, realName: this.newHeroRealName, powers: this.selectedPowers});
-        await this.createHero({publicName: this.newHeroPublicName, realName: this.newHeroRealName, powers: this.selectedPowers});
+        if(this.newHeroPublicName === '' || this.newHeroRealName === '' || this.selectedPowers.length === 0) {
+          return this.pushError('Please fill in all fields.')
+        }
 
-        this.newHeroPublicName = '';
-        this.newHeroRealName = '';
-        this.selectedPowers = [];
+        await this.createHero({publicName: this.newHeroPublicName, realName: this.newHeroRealName, powers: this.selectedPowers});
 
         this.closeHeroCreationDialog();
       } catch(err) {

@@ -1,5 +1,5 @@
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapMutations } from 'vuex';
 export default {
   name: 'OrgsView',
   computed: {
@@ -19,6 +19,7 @@ export default {
   },
   methods: {
     ...mapActions('appdataStore', ['loadOrgs', 'loadOrgDetails', 'createOrg', 'authenticateOrganization']),
+    ...mapMutations('errorStore', ['pushError']),
     openOrgCreationDialog() {
       this.dialogVisible = true;
     },
@@ -32,7 +33,7 @@ export default {
       if(!this.currentOrg.error) {
         await this.$router.push(`/orgs/${org._id}`);
       } else {
-        alert('Wrong password for this org');
+        this.pushError("Wrong password for this organization.");
       }
     },
     async createNewOrg() {

@@ -1,16 +1,17 @@
 const errorStore = {
     namespaced: true,
     state: {
-
+        isError: false,
+        errorMsg: '',
     },
     mutations: {
-
-    },
-    actions: {
-
-    },
-    getters: {
-
+        pushError(state, msg){
+            state.errorMsg = msg
+            state.isError = true
+        },
+        popError(state) {
+            state.isError = false
+        },
     }
 }
 
