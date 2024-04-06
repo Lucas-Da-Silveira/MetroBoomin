@@ -41,12 +41,14 @@ export default {
       await this.addTeam(this.selectedTeam).then(() => {
         this.linkLoading = false;
       });
+
+      this.selectToogle = false;
       this.showNotif({msg: "Team linked successfully.", type: "success", color: "blue"});
     },
 
     async unlinkTeam(team) {
       await this.removeTeam(team);
-      this.showNotif({msg: "Team unlinked successfully.", type: "success", color: "red"});
+      this.showNotif({msg: "Team unlinked successfully.", type: "success", color: "blue"});
     }
   },
 }
@@ -65,13 +67,14 @@ export default {
         <v-toolbar flat>
           <v-toolbar-title>Teams in {{ currentOrg[0].name }}</v-toolbar-title>
           <v-spacer/>
+
           <v-autocomplete
               v-model="selectedTeam"
               :items="teams"
               item-text="name"
               item-value="_id"
               label="Team"
-              outlined
+              solo
               v-show="selectToogle"
           >
             <template v-slot:append-outer>
@@ -81,7 +84,6 @@ export default {
               <v-btn color="success" @click="linkTeam" fab small :loading="linkLoading" :disabled="!!!selectedTeam">
                 <v-icon>mdi-check</v-icon>
               </v-btn>
-
             </template>
           </v-autocomplete>
           <v-btn v-show="!selectToogle" color="primary" @click="selectToogle = !selectToogle">

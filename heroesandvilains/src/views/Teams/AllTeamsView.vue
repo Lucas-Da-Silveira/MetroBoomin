@@ -21,6 +21,7 @@ export default {
   methods: {
     ...mapActions('appdataStore', ['loadTeams', 'createTeam']),
     ...mapMutations('appdataStore', ['showNotif']),
+    ...mapMutations('errorStore', ['pushError']),
     openTeamCreationDialog() {
       this.dialogVisible = true;
     },
@@ -30,7 +31,12 @@ export default {
     },
     createNewTeam() {
       try {
+        if(this.newTeamName === '') {
+          return this.pushError('Please fill in all fields.');
+        }
+
         this.createTeam({name: this.newTeamName});
+
         this.closeTeamCreationDialog();
         this.showNotif({msg: "Team created successfully.", type: "success", color: "green"});
       } catch(err) {

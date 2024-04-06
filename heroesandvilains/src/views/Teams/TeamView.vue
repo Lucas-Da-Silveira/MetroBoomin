@@ -45,6 +45,9 @@ export default {
         this.heroes = [];
         this.linkLoading = false;
       });
+
+      this.selectToogle = false;
+
       await this.fetchHeroes();
       this.showNotif({msg: "Hero linked successfully.", type: "success", color: "blue"});
     },
@@ -54,7 +57,7 @@ export default {
         this.heroes = [];
       });
       await this.fetchHeroes();
-      this.showNotif({msg: "Hero unlinked successfully.", type: "success", color: "red"});
+      this.showNotif({msg: "Hero unlinked successfully.", type: "success", color: "blue"});
     },
 
     async fetchHeroes() {
@@ -90,7 +93,7 @@ export default {
               item-text="publicName"
               item-value="_id"
               label="Hero"
-              outlined
+              solo
               v-show="selectToogle"
           >
             <template v-slot:append-outer>

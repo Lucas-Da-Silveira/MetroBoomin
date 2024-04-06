@@ -35,16 +35,25 @@ export default {
       this.newOrgPassword = '';
     },
     async handleClick(org) {
-      await this.loadOrgDetails(org._id);
-      if(!this.currentOrg.error) {
-        await this.$router.push(`/orgs/${org._id}`);
-      } else {
-        this.pushError("Wrong password for this organization.");
+      try {
+        await this.loadOrgDetails(org._id);
+        if(!this.currentOrg.error) {
+          await this.$router.push(`/orgs/${org._id}`);
+        } else {
+          this.pushError("Wrong password for this organization.");
+        }
+      } catch(err) {
+        console.error(err);
       }
     },
     async createNewOrg() {
       try {
+        if(this.newOrgName === '' || this.newOrgPassword === '') {
+          return this.pushError('Please fill in all fields.');
+        }
+
         await this.createOrg({name: this.newOrgName, password: this.newOrgPassword});
+
         this.closeOrgCreationDialog();
         this.showNotif({msg: "Organisation created successfully.", type: "success", color: "green"});
       } catch(err) {

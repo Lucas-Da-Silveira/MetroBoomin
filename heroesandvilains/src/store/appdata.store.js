@@ -66,9 +66,6 @@ const appdataStore = {
         addHero(state, hero) {
             state.heroAliases.push(hero);
         },
-        removeTeam(state, team) {
-            state.teams = state.teams.filter(t => t._id !== team._id);
-        },
 
         showNotif(state, settings) {
             state.notifMsg = settings.msg;
@@ -77,41 +74,13 @@ const appdataStore = {
             state.notifOn = true;
             setTimeout(() => {
                 state.notifOn = false;
-            }, 4000);
+            }, 3000);
         }
     },
     actions: {
-        async authenticateOrganization({commit, dispatch}, password) {
-            // FIXME: full CASSé (à faire avec le hero auth)
-            try {
-                const res = await orgService.getOrgs();
-                const orgs = res.data;
-
-                let org = null;
-                for(const org1 of orgs) {
-                    const orgDetails = await orgService.getOrgById(org1._id, password);
-                    if(orgDetails.secret === password) {
-                        org = orgDetails;
-                        break;
-                    }
-                }
-                console.log(`org: ${org}`);
-
-                if (org) {
-                    commit('setOrgPassword', password);
-                    await Promise.all([
-                        dispatch('loadHeroAliases'),
-                        dispatch('loadTeams'),
-                        dispatch('loadOrgs'),
-                        dispatch('loadOrgDetails', org._id)
-                    ]);
-                    return org;
-                } else {
-                    throw new Error('Wrong password');
-                }
-            } catch (err) {
-                throw new Error(err.message);
-            }
+        async authenticateOrganization({commit}, secret) {
+            commit('setOrgPassword', secret);
+            commit('showNotif', {msg: `Logged in with secret: ${secret}`, type: 'info', color: 'green'});
         },
 
         async loadHeroAliases({commit}) {
@@ -242,9 +211,6 @@ const appdataStore = {
                 throw new Error(err.message);
             }
         }
-    },
-    getters: {
-
     }
 }
 

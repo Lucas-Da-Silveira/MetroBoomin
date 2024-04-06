@@ -1,7 +1,9 @@
 <script>
 import {mapState, mapActions, mapMutations} from 'vuex';
+import NotificationAlert from "@/components/NotificationAlert.vue";
 export default {
   name: 'HeroesView',
+  components: {NotificationAlert},
   computed: {
     ...mapState('appdataStore', ['heroAliases', 'heroPowers', 'currentHero']),
   },
@@ -61,7 +63,7 @@ export default {
     async createNewHero() {
       try {
         if(this.newHeroPublicName === '' || this.newHeroRealName === '' || this.selectedPowers.length === 0) {
-          return this.pushError('Please fill in all fields.')
+          return this.pushError('Please fill in all fields.');
         }
 
         await this.createHero({publicName: this.newHeroPublicName, realName: this.newHeroRealName, powers: this.selectedPowers});
@@ -81,6 +83,7 @@ export default {
 
 <template>
   <v-container class="container">
+    <NotificationAlert></NotificationAlert>
     <v-data-table
         :headers="headers"
         :items="heroAliases"
