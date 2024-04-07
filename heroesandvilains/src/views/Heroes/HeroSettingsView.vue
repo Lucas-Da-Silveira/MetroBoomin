@@ -1,63 +1,70 @@
 <script>
-import {mapActions, mapMutations, mapState} from 'vuex';
 import NotificationAlert from "@/components/NotificationAlert.vue";
-
+import {mapActions, mapMutations, mapState} from "vuex";
 export default {
-  name: 'HeroView',
+  name: 'HeroSettingsView',
   components: {NotificationAlert},
-  data() {
-    return {
-      headers: [
-        { text: "Name", value: "name" },
-        { text: "Type", value: "type" },
-        { text: "Level", value: "level" },
-        { text: "Actions", value: "actions", sortable: false }
-      ],
-      powerTypes: ['Force', 'Vitesse', 'Endurance', 'Magie', 'Effrayant', 'Furtivité', 'Stupidité'],
-      heroData: {
+  data: () => ({
+    headers: [
+      { text: "Name", value: "name" },
+      { text: "Type", value: "type" },
+      { text: "Level", value: "level" },
+      { text: "Actions", value: "actions", sortable: false }
+    ],
+    powerTypes: ['Force', 'Vitesse', 'Endurance', 'Magie', 'Effrayant', 'Furtivité', 'Stupidité'],
+    isChanged: false,
+    heroData: {
+      login: '',
+      hero: {
+        _id: '',
         publicName: '',
         realName: '',
         powers: []
-      },
-      isChanged: false,
-      deleteDialogVisible: false,
-      createDialogVisible: false,
-      powerToRemove: {
-        name: '',
-        type: 0,
-        level: 0
-      },
-      newPower: {
-        name: '',
-        type: 0,
-        level: 0
-      },
-      search: '',
-    }
-  },
+      }
+    },
+    deleteDialogVisible: false,
+    createDialogVisible: false,
+    powerToRemove: {
+      name: '',
+      type: 0,
+      level: 0
+    },
+    newPower: {
+      name: '',
+      type: 0,
+      level: 0
+    },
+    search: '',
+  }),
   computed: {
-    ...mapState('appdataStore', ['currentHero']),
+    ...mapState('heroStore', ['hero']),
   },
   methods: {
-    ...mapActions('appdataStore', ['updateHero']),
     ...mapMutations('appdataStore', ['showNotif']),
+    ...mapActions('heroStore', ['heroUpdate']),
     checkIfChanged() {
-      this.isChanged = this.heroData.publicName !== this.currentHero[0].publicName ||
-          this.heroData.realName !== this.currentHero[0].realName ||
-          JSON.stringify(this.heroData.powers) !== JSON.stringify(this.currentHero[0].powers);
+      this.isChanged = this.heroData.hero.publicName !== this.hero.hero.publicName ||
+          this.heroData.hero.realName !== this.hero.hero.realName ||
+          JSON.stringify(this.heroData.hero.powers) !== JSON.stringify(this.hero.hero.powers);
     },
-    fetchHeroData() {
-      this.heroData = {
-        _id: this.currentHero[0]._id,
-        publicName: this.currentHero[0].publicName,
-        realName: this.currentHero[0].realName,
-        powers: JSON.parse(JSON.stringify(this.currentHero[0].powers))
-      };
-      this.checkIfChanged();
-    },
+
     getPowerType(type) {
       return this.powerTypes[type - 1];
     },
+
+    fetchHeroData() {
+      this.heroData = {
+        login: this.hero.login,
+        hero: {
+          _id: this.hero.hero._id,
+          publicName: this.hero.hero.publicName,
+          realName: this.hero.hero.realName,
+          powers: JSON.parse(JSON.stringify(this.hero.hero.powers))
+        }
+      };
+      this.checkIfChanged();
+    },
+
     openConfirmDialog(power) {
       this.powerToRemove = power;
       this.deleteDialogVisible = true;
@@ -70,6 +77,7 @@ export default {
         level: 0
       };
     },
+
     openPowerCreationDialog() {
       this.createDialogVisible = true;
     },
@@ -81,11 +89,12 @@ export default {
         level: 0
       };
     },
+
     addNewPower() {
       const typeIndex = this.powerTypes.indexOf(this.newPower.type);
       this.newPower.type = typeIndex + 1;
 
-      this.heroData.powers.push(this.newPower);
+      this.heroData.hero.powers.push(this.newPower);
       this.checkIfChanged();
 
       this.newPower = {
@@ -99,7 +108,7 @@ export default {
     },
 
     removePower(power) {
-      this.heroData.powers = this.heroData.powers.filter(p => p.name !== power.name);
+      this.heroData.hero.powers = this.heroData.hero.powers.filter(p => p.name !== power.name);
       this.closeConfirmDialog();
       this.checkIfChanged();
 
@@ -107,7 +116,7 @@ export default {
     },
 
     async saveHero() {
-      await this.updateHero(this.heroData).then(() => {
+      await this.heroUpdate(this.heroData).then(() => {
         this.fetchHeroData();
       });
 
@@ -118,27 +127,29 @@ export default {
   mounted() {
     this.fetchHeroData();
   }
-};
+}
 </script>
 
 <template>
-  <v-container>
+  <v-container class="container">
     <NotificationAlert></NotificationAlert>
+
     <v-card>
-      <v-card-title>{{ currentHero[0].publicName }} ({{ currentHero[0].realName }})</v-card-title>
+      <v-card-title>Settings for {{ heroData.login }}</v-card-title>
+
       <v-card-text>
         <div class="hero-info">
           <v-text-field
               class="infos"
               label="Public Name"
-              v-model="heroData.publicName"
+              v-model="heroData.hero.publicName"
               outlined
               @change="checkIfChanged"
           ></v-text-field>
           <v-text-field
               class="infos"
               label="Real Name"
-              v-model="heroData.realName"
+              v-model="heroData.hero.realName"
               outlined
               @change="checkIfChanged"
           ></v-text-field>
@@ -146,7 +157,7 @@ export default {
 
         <v-data-table
             :headers="headers"
-            :items="heroData.powers.map(power => ({...power, type: getPowerType(power.type)}))"
+            :items="heroData.hero.powers.map(power => ({...power, type: getPowerType(power.type)}))"
             item-key="name"
             :items-per-page="5"
             class="elevation-1"
@@ -175,6 +186,7 @@ export default {
           </template>
         </v-data-table>
       </v-card-text>
+
 
       <v-card-actions>
         <v-btn color="primary" :disabled="!isChanged" @click="saveHero">SAVE</v-btn>
@@ -211,11 +223,11 @@ export default {
         </v-form>
       </v-card>
     </v-dialog>
-
   </v-container>
 </template>
 
 <style scoped>
+
 .hero-info {
   display: flex;
   flex-direction: row;

@@ -16,6 +16,7 @@ export default {
       dialogVisible: false,
       newOrgName: '',
       newOrgPassword: '',
+
       search: '',
 
       notifOn: false,
@@ -23,7 +24,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions('appdataStore', ['loadOrgs', 'loadOrgDetails', 'createOrg', 'authenticateOrganization']),
+    ...mapActions('appdataStore', ['loadOrgs', 'loadOrgDetails', 'createOrg']),
     ...mapMutations('errorStore', ['pushError']),
     ...mapMutations('appdataStore', ['showNotif']),
     openOrgCreationDialog() {

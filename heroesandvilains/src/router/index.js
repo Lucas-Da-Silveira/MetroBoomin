@@ -11,14 +11,24 @@ const routes = [
     component: () => import('@/views/HomeView.vue')
   },
   {
-    path: '/login',
-    name: 'login',
-    component: () => import('@/views/LoginView.vue')
+    path: '/org/login',
+    name: 'org-login',
+    component: () => import('@/views/Login/OrgLoginView.vue')
+  },
+  {
+    path: '/hero/login',
+    name: 'hero-login',
+    component: () => import('@/views/Login/HeroLoginView.vue')
+  },
+  {
+    path: '/hero/register',
+    name: 'hero-register',
+    component: () => import('@/views/Login/HeroRegisterView.vue')
   },
   {
     path: '/orgs',
     name: 'orgs',
-    component: () => import('@/views/Orgs/AllOrgsView.vue'),
+    component: () => import('@/views/Orgs/AllOrgsView.vue')
   },
   {
     path: '/orgs/:id',
@@ -28,7 +38,7 @@ const routes = [
   {
     path: '/teams',
     name: 'teams',
-    component: () => import('@/views/Teams/AllTeamsView.vue'),
+    component: () => import('@/views/Teams/AllTeamsView.vue')
   },
   {
     path: '/teams/:id',
@@ -44,6 +54,11 @@ const routes = [
     path: '/heroes/:id',
     name: 'hero-id',
     component: () => import('@/views/Heroes/HeroView.vue')
+  },
+  {
+    path: '/hero/settings',
+    name: 'hero-settings',
+    component: () => import('@/views/Heroes/HeroSettingsView.vue')
   }
 ]
 

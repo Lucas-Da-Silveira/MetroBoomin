@@ -1,9 +1,18 @@
 import Axios from 'axios';
+// import store from "@/store";
 
 let axiosAgent = Axios.create({
-    baseURL: 'https://apidemo.iut-bm.univ-fcomte.fr/herocorp',
+    baseURL: 'https://apidemo.iut-bm.univ-fcomte.fr',
     withCredentials: true
 });
+
+// axiosAgent.interceptors.request.use(config => {
+//     const secretPhrase = store.getters['secretStore/getOrgSecret'];
+//     if (secretPhrase) {
+//         config.headers['org-secret'] = secretPhrase;
+//     }
+//     return config;
+// });
 
 let errorHandler = (err) => {
     if (err.response) {

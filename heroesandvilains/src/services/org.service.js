@@ -1,18 +1,18 @@
 import { getMethod, postMethod, patchMethod } from "./axios.service";
 
 let getOrgs = async () => {
-    return await getMethod('/orgs/get');
+    return await getMethod('/herocorp/orgs/get');
 }
 
 let createOrg = async (name, secret) => {
-    return await postMethod('/orgs/create', {
+    return await postMethod('/herocorp/orgs/create', {
         name,
         secret
     });
 }
 
 let addTeam = async (idTeam, secret) => {
-    return await patchMethod('/orgs/addteam', { 'idTeam': idTeam }, {
+    return await patchMethod('/herocorp/orgs/addteam', { 'idTeam': idTeam }, {
         headers: {
             'org-secret': secret
         }
@@ -20,7 +20,7 @@ let addTeam = async (idTeam, secret) => {
 }
 
 let removeTeam = async (idTeam, secret) => {
-    return await patchMethod('/orgs/removeteam', { 'idTeam': idTeam }, {
+    return await patchMethod('/herocorp/orgs/removeteam', { 'idTeam': idTeam }, {
         headers: {
             'org-secret': secret
         }
@@ -28,7 +28,7 @@ let removeTeam = async (idTeam, secret) => {
 }
 
 let getOrgById = async (idOrg, secret) => {
-    return await getMethod(`/orgs/getbyid/${idOrg}`,{
+    return await getMethod(`/herocorp/orgs/getbyid/${idOrg}`,{
         headers: {
             'org-secret': secret
         }

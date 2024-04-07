@@ -2,23 +2,28 @@
 import {mapActions} from "vuex";
 import NotificationAlert from "@/components/NotificationAlert.vue";
 export default {
-  name: 'LoginView',
+  name: 'HeroLoginView',
   components: {NotificationAlert},
   data: () => ({
-    valid: true,
-    password: '',
-    passwordRules: [
-      v => !!v || 'Password is required',
+    valid: false,
+
+    credentials: {
+      login: '',
+      password: '',
+    },
+
+    textFieldRules: [
+      v => !!v || 'Field cannot be empty',
     ],
   }),
   methods: {
-    ...mapActions('appdataStore', ['authenticateOrganization']),
+    ...mapActions('heroStore', ['heroLogin']),
     async validate () {
       this.$refs.form.validate();
-      this.valid = this.password !== '';
+      this.valid = this.login !== '' && this.password !== '';
       if(this.valid) {
-        await this.authenticateOrganization(this.password)
-        await this.$router.push('/orgs');
+        await this.heroLogin(this.credentials);
+        await this.$router.push('/hero/settings');
       }
     },
   },
@@ -29,7 +34,7 @@ export default {
   <v-container class="container">
     <NotificationAlert></NotificationAlert>
     <v-card>
-      <v-card-title>Login</v-card-title>
+      <v-card-title>Hero Login</v-card-title>
       <v-card-text>
         <v-form
             ref="form"
@@ -37,8 +42,15 @@ export default {
             lazy-validation
         >
           <v-text-field
-              v-model="password"
-              :rules="passwordRules"
+              v-model="credentials.login"
+              :rules="textFieldRules"
+              label="Login"
+              solo
+              required
+          ></v-text-field>
+          <v-text-field
+              v-model="credentials.password"
+              :rules="textFieldRules"
               label="Password"
               solo
               required
@@ -57,7 +69,6 @@ export default {
         </v-btn>
       </v-card-actions>
     </v-card>
-
   </v-container>
 </template>
 

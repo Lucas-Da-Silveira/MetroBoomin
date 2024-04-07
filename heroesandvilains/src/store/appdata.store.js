@@ -83,12 +83,17 @@ const appdataStore = {
             commit('showNotif', {msg: `Logged in with secret: ${secret}`, type: 'info', color: 'green'});
         },
 
+        async orgLogout({commit}) {
+            commit('setOrgPassword', '');
+            commit('showNotif', {msg: `Logged out of this org.`, type: 'info', color: 'blue'});
+        },
+
         async loadHeroAliases({commit}) {
             try {
                 const res = await heroService.getHeroAliases();
                 commit('setHeroAliases', res.data);
             } catch (err) {
-                throw new Error(err.message);
+                commit('errorStore/pushError', "Failed to load hero aliases.", {root: true});
             }
         },
 
@@ -98,7 +103,7 @@ const appdataStore = {
                 commit('setCurrentHero', res.data);
                 return res.data;
             } catch (err) {
-                throw new Error(err.message);
+                commit('errorStore/pushError', "Failed to load this hero's data.", {root: true});
             }
         },
 
@@ -107,7 +112,7 @@ const appdataStore = {
                 const res = await teamService.getTeams();
                 commit('setTeams', res.data);
             } catch (err) {
-                throw new Error(err.message);
+                commit('errorStore/pushError', "Failed to load teams.", {root: true});
             }
         },
 
@@ -118,7 +123,7 @@ const appdataStore = {
                 const team = teams.find(t => t._id === teamId);
                 commit('setCurrentTeam', team);
             } catch (err) {
-                throw new Error(err.message);
+                commit('errorStore/pushError', "Failed to load this team's data.", {root: true});
             }
         },
 
@@ -127,7 +132,7 @@ const appdataStore = {
                 const res = await orgService.getOrgs();
                 commit('setOrgs', res.data);
             } catch (err) {
-                throw new Error(err.message);
+                commit('errorStore/pushError', "Failed to load orgs.", {root: true});
             }
         },
 
@@ -136,7 +141,7 @@ const appdataStore = {
                 const res = await orgService.getOrgById(orgId, state.orgPassword);
                 commit('setCurrentOrg', res.data);
             } catch (err) {
-                throw new Error(err.message);
+                commit('errorStore/pushError', "Failed to load this org's data.", {root: true});
             }
         },
 
@@ -145,7 +150,7 @@ const appdataStore = {
                 const res = await teamService.createTeam(team, state.orgPassword);
                 commit('createTeam', res.data);
             } catch (err) {
-                throw new Error(err.message);
+                commit('errorStore/pushError', "Failed to create the team.", {root: true});
             }
         },
 
@@ -154,7 +159,7 @@ const appdataStore = {
                 const res = await orgService.createOrg(org.name, org.password);
                 commit('addOrg', res.data);
             } catch(err) {
-                throw new Error(err.message);
+                commit('errorStore/pushError', "Failed to create the org.", {root: true});
             }
         },
 
@@ -163,52 +168,52 @@ const appdataStore = {
                 const res = await heroService.createHero(hero);
                 commit('addHero', res.data);
             } catch(err) {
-                throw new Error(err.message);
+                commit('errorStore/pushError', "Failed to create the hero.", {root: true});
             }
         },
 
-        async updateHero({dispatch, state}, hero) {
+        async updateHero({dispatch, commit, state}, hero) {
             try {
                 await heroService.updateHero(hero, state.orgPassword);
                 await dispatch('loadHeroDetails', hero._id);
             } catch (err) {
-                throw new Error(err.message);
+                commit('errorStore/pushError', "Failed to edit the hero.", {root: true});
             }
         },
 
-        async addTeam({dispatch, state}, teamId) {
+        async addTeam({dispatch, commit, state}, teamId) {
             try {
                 await orgService.addTeam(teamId, state.orgPassword);
                 await dispatch('loadOrgDetails', state.currentOrg[0]._id);
             } catch (err) {
-                throw new Error(err.message);
+                commit('errorStore/pushError', "Failed to link the team to the org.", {root: true});
             }
         },
 
-        async removeTeam({dispatch, state}, team) {
+        async removeTeam({dispatch, commit, state}, team) {
             try {
                 await orgService.removeTeam(team._id, state.orgPassword);
                 await dispatch('loadOrgDetails', state.currentOrg[0]._id);
             } catch (err) {
-                throw new Error(err.message);
+                commit('errorStore/pushError', "Failed to unlink the team from the org.", {root: true});
             }
         },
 
-        async addHero({dispatch, state}, heroId) {
+        async addHero({dispatch, commit, state}, heroId) {
             try {
                 await teamService.addHeroes([heroId], state.currentTeam._id);
                 await dispatch('loadTeamDetails', state.currentTeam._id);
             } catch(err) {
-                throw new Error(err.message);
+                commit('errorStore/pushError', "Failed to link the hero to the team.", {root: true});
             }
         },
 
-        async removeHero({dispatch, state}, heroId) {
+        async removeHero({dispatch, commit, state}, heroId) {
             try {
                 await teamService.removeHeroes([heroId], state.currentTeam._id);
                 await dispatch('loadTeamDetails', state.currentTeam._id);
             } catch(err) {
-                throw new Error(err.message);
+                commit('errorStore/pushError', "Failed to unlink the hero from the org.", {root: true});
             }
         }
     }

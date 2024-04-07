@@ -1,6 +1,6 @@
 <script>
 
-import {mapMutations, mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 
 export default {
   name: 'NavBar',
@@ -13,12 +13,11 @@ export default {
   }),
   computed: {
     ...mapState('appdataStore', ['orgPassword']),
+    ...mapState('heroStore', ['xsrfToken']),
   },
   methods: {
-    ...mapMutations('appdataStore', ['setOrgPassword']),
-    logout() {
-      this.setOrgPassword('');
-    },
+    ...mapActions('appdataStore', ['orgLogout']),
+    ...mapActions('heroStore', ['heroLogout'])
   }
 };
 </script>
@@ -59,24 +58,75 @@ export default {
 
     <v-spacer></v-spacer>
 
-    <router-link v-if="orgPassword === ''" to="/login">
+    <router-link v-if="xsrfToken.length === 0" to="/hero/register">
       <v-btn
           elevation="2"
           text
       >
-        Login
+        REGISTER
+        <v-icon
+            right
+            dark
+        >mdi-account-plus</v-icon>
+      </v-btn>
+    </router-link>
+
+    <router-link v-if="xsrfToken.length !== 0" to="/hero/settings">
+      <v-btn
+        class="mx-2"
+        fab
+        small
+        color="primary"
+      >
+        <v-icon>
+          mdi-account
+        </v-icon>
+      </v-btn>
+    </router-link>
+
+    <router-link v-if="xsrfToken.length === 0" to="/hero/login" style="margin-left: 10px;">
+      <v-btn
+          elevation="2"
+          text
+      >
+        HERO LOGIN
         <v-icon
             right
             dark
         >mdi-account</v-icon>
       </v-btn>
     </router-link>
-    <router-link v-else to="">
+    <router-link v-else to="/hero/login">
       <v-btn
           elevation="2"
           text
-          @click="logout">
-        Logout
+          @click="heroLogout">
+        HERO LOGOUT
+        <v-icon
+            right
+            dark
+        >mdi-logout</v-icon>
+      </v-btn>
+    </router-link>
+
+    <router-link v-if="orgPassword.length === 0" to="/org/login" style="margin-left: 10px;">
+      <v-btn
+          elevation="2"
+          text
+      >
+        ORG LOGIN
+        <v-icon
+            right
+            dark
+        >mdi-earth</v-icon>
+      </v-btn>
+    </router-link>
+    <router-link v-else to="/org/login" style="margin-left: 10px;">
+      <v-btn
+          elevation="2"
+          text
+          @click="orgLogout">
+        ORG LOGOUT
         <v-icon
             right
             dark
